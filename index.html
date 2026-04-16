@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Caddie">
+<meta name="theme-color" content="#0a0f0d">
+<title>Werner's Caddie — Old Schoolers Ryder Cup</title>
+<link rel="manifest" href="#" id="manifest-link">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+:root{
+  --bg:#080d0b;--surface:#0f1812;--surface2:#162019;--border:#1e2e22;
+  --text:#d6e8d0;--muted:#5a7a60;--accent:#3dff7a;--accent-dim:#1a6632;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;touch-action:pan-y;}
+
+/* HEADER */
+.header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 14px 8px;display:flex;flex-direction:column;gap:8px;}
+.header-top{display:flex;align-items:center;justify-content:space-between;}
+.brand{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--accent);line-height:1;}
+.brand span{color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;letter-spacing:1px;display:block;margin-top:2px;}
+.ka-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:5px 10px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.ka-btn::before{content:'●';font-size:8px;color:var(--muted);}
+.ka-btn.active{border-color:var(--accent-dim);color:var(--accent);background:rgba(61,255,122,0.05);}
+.ka-btn.active::before{color:var(--accent);}
+.day-selector{display:flex;gap:6px;}
+.day-btn{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:6px 4px;border-radius:6px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.day-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+
+/* HOLE BAR */
+.hole-bar{position:fixed;top:110px;left:0;right:0;z-index:99;background:var(--bg);padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.hole-nav{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.nav-btn{width:34px;height:34px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;}
+.nav-btn:active{background:var(--surface2);transform:scale(0.93);}
+.hole-id{flex-shrink:0;}
+.hole-label{font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;color:var(--text);letter-spacing:2px;}
+.hole-name{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:1px;}
+
+/* Hole stat chips — larger, no labels */
+.hole-chips{display:flex;gap:6px;flex-shrink:0;}
+.h-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 10px;text-align:center;}
+.h-chip .v{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);line-height:1;}
+
+/* Zone pill — compact, inline with hole bar */
+.zone-pill{display:flex;align-items:center;gap:6px;border-radius:8px;padding:6px 10px;border:1px solid;flex-shrink:0;margin-left:auto;}
+.zone-pill.attack{background:#071a0e;border-color:#2a7a40;}
+.zone-pill.contest{background:#1a1405;border-color:#b07a10;}
+.zone-pill.defend{background:#1a0808;border-color:#c03030;}
+.zone-pill-icon{font-size:12px;font-family:'DM Mono',monospace;}
+.zone-pill.attack .zone-pill-icon{color:#4dff8a;}
+.zone-pill.contest .zone-pill-icon{color:#f0b030;}
+.zone-pill.defend .zone-pill-icon{color:#ff6060;}
+.zone-pill-label{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;line-height:1;}
+.zone-pill.attack .zone-pill-label{color:#4dff8a;}
+.zone-pill.contest .zone-pill-label{color:#f0b030;}
+.zone-pill.defend .zone-pill-label{color:#ff6060;}
+.zone-totals-pill{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;text-align:center;}
+
+/* MAIN */
+.main{position:fixed;top:172px;bottom:0;left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.card{padding:12px 14px 100px;}
+.card-wrapper{transition:transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94),opacity 0.2s;}
+.card-wrapper.slide-left{transform:translateX(-30px);opacity:0;}
+.card-wrapper.slide-right{transform:translateX(30px);opacity:0;}
+
+.section-head{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+
+/* EU opportunity strip — more compact */
+.opp-strip{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.opp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:10px;}
+.opp-card.leader{border-color:var(--accent-dim);background:rgba(61,255,122,0.04);}
+.opp-left{}
+.opp-rank{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;color:var(--text);line-height:1;}
+.opp-card.leader .opp-rank{color:var(--accent);}
+.opp-right{display:flex;flex-direction:column;gap:3px;}
+.opp-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px;color:var(--muted);text-transform:uppercase;}
+.opp-card.leader .opp-name{color:var(--accent);}
+.opp-strokes{font-family:'DM Mono',monospace;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;}
+.opp-strokes.s2{background:#3a0a0a;color:#ff6060;}
+.opp-strokes.s1{background:var(--surface2);color:var(--muted);}
+.opp-strokes.s0{background:var(--surface2);color:#3a4a3a;}
+.opp-ng{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.opp-ng span{color:var(--accent);font-weight:500;}
+
+/* Strategy */
+.strategy-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:12px;font-size:13.5px;line-height:1.65;color:var(--text);}
+.strategy-box .hl{color:var(--accent);font-weight:600;}
+.strategy-box .warn{color:#ff6060;font-weight:600;}
+.strategy-box .note{color:#f0b030;font-weight:600;}
+.strategy-box .divider{display:block;border-top:1px solid var(--border);margin:10px 0;}
+
+/* Hazards */
+.hazard-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.hazard-tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.hazard-tag.danger{border-color:#7a2020;color:#f87171;background:#1a0808;}
+.hazard-tag.water{border-color:#1a4a7a;color:#60a5fa;background:#080f1a;}
+.hazard-tag.bunker{border-color:#6b5a1a;color:#f0c060;background:#1a1405;}
+
+/* Stroke table — no team col, US net par in green */
+.stroke-table{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;}
+.stroke-table table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px;}
+.stroke-table th{background:var(--surface2);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:7px 10px;text-align:left;font-weight:400;}
+.stroke-table td{padding:8px 10px;border-top:1px solid var(--border);color:var(--text);}
+.stroke-table tr.is-werner td{background:rgba(61,255,122,0.04);}
+.stroke-table tr.is-werner td:first-child{border-left:2px solid var(--accent);padding-left:8px;}
+.eu-name{color:#60a5fa;font-weight:500;}
+.us-name{color:#f87171;font-weight:500;}
+.sb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:500;}
+.sb.s0{color:var(--muted);}
+.sb.s1{background:var(--accent-dim);color:var(--accent);}
+.sb.s2{background:#c0392b;color:#fff;font-weight:700;}
+
+.swipe-hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);opacity:0.5;pointer-events:none;white-space:nowrap;}
+.install-banner{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:200;transform:translateY(100%);transition:transform 0.3s;}
+.install-banner.show{transform:translateY(0);}
+.install-banner p{font-size:13px;color:var(--text);flex:1;}
+.install-banner p small{display:block;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px;}
+.install-btn{background:var(--accent);color:#000;border:none;border-radius:8px;padding:8px 14px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:13px;cursor:pointer;flex-shrink:0;}
+.dismiss-btn{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px;}
+.main::-webkit-scrollbar{width:3px;}
+.main::-webkit-scrollbar-track{background:transparent;}
+.main::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div class="brand">CADDIE<span>Werner · Old Schoolers Ryder Cup</span></div>
+    <button class="ka-btn" id="kaBtn" onclick="toggleKeepAlive()">KEEP ALIVE</button>
+  </div>
+  <div class="day-selector">
+    <button class="day-btn active" onclick="setDay(1)">DAY 1 · SCRAMBLE</button>
+    <button class="day-btn" onclick="setDay(2)">DAY 2 · BETTER BALL</button>
+    <button class="day-btn" onclick="setDay(3)">DAY 3 · SINGLES</button>
+  </div>
+</div>
+
+<div class="hole-bar" id="holeBar">
+  <div class="hole-nav">
+    <button class="nav-btn" onclick="prevHole()">‹</button>
+    <div class="hole-id">
+      <div class="hole-label" id="holeNum">HOLE 1</div>
+      <div class="hole-name" id="holeName">Blue Gum</div>
+    </div>
+    <button class="nav-btn" onclick="nextHole()">›</button>
+  </div>
+  <div class="hole-chips" id="holeChips"></div>
+  <div id="zonePill"></div>
+</div>
+
+<div class="main" id="mainScroll">
+  <div class="card-wrapper" id="cardWrapper">
+    <div class="card" id="holeCard"></div>
+  </div>
+</div>
+
+<div class="swipe-hint" id="swipeHint">← swipe between holes →</div>
+<div class="install-banner" id="installBanner">
+  <p>Install as app <small>Add to Home Screen for quick access</small></p>
+  <button class="install-btn" onclick="installApp()">INSTALL</button>
+  <button class="dismiss-btn" onclick="dismissInstall()">✕</button>
+</div>
+
+<script>
+const HOLES=[
+  {num:1, name:"Blue Gum",         par:5,si:18,dist:414,werner:1,deon:0,cilliers:0,christo:1,
+   tags:[{t:"Canal left",c:"water"},{t:"Bunkers green",c:"bunker"},{t:"OOB left",c:"danger"}],
+   desc:"Long par 5 — three shots for everyone. Canal runs the entire left side. Ideal tee line is just right of the blue gum tree. No heroics on the second shot; lay up comfortably to leave a full third shot into a well-bunkered green."},
+  {num:2, name:"Tree-lined",        par:4,si:12,dist:308,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"OOB left",c:"danger"},{t:"Trees right",c:"bunker"},{t:"No run-up",c:"danger"}],
+   desc:"Short par 4 — short iron approach. OOB is hard left, trees right act as a guide. Green does not accept run-up shots — trees behind kill any bounce-through. Commit to a flying shot and stop it on the green."},
+  {num:3, name:"River Par 3",       par:3,si:16,dist:131,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Grass bank left",c:"bunker"},{t:"Bunkers right",c:"bunker"},{t:"Wind factor",c:"danger"}],
+   desc:"Short par 3 but wind can make it play significantly longer. Grass bank guards the left, two bunkers right. Club selection is the most important decision here — commit to the number and make a smooth swing to the centre of the green."},
+  {num:4, name:"Elevated Green",    par:4,si:6, dist:350,werner:1,deon:1,cilliers:1,christo:1,
+   tags:[{t:"Water right",c:"water"},{t:"Elevated green",c:"danger"},{t:"Bunker left",c:"bunker"}],
+   desc:"Elevated green adds effective distance on the approach — always take one extra club. Bail out right off the tee if uncertain; trouble is left. Water right of the green, bunker left — aim centre and let the elevation work in your favour."},
+  {num:5, name:"Bunker Par 5",      par:5,si:8, dist:475,werner:1,deon:1,cilliers:1,christo:1,
+   tags:[{t:"Fairway bunkers",c:"bunker"},{t:"Elevated green",c:"danger"},{t:"Left penalty",c:"danger"}],
+   desc:"Long par 5, three-shot hole for all. Two fairway bunkers threaten the tee shot. Third shot into an elevated green: missing left is a severe penalty, missing right is recoverable. Three-shot discipline wins this hole."},
+  {num:6, name:"Short Par 4",       par:4,si:10,dist:308,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Fairway bunkers",c:"bunker"},{t:"Bunker front-left",c:"bunker"}],
+   desc:"Short par 4 with a wedge or short iron approach. Two fairway bunkers frame the tee shot. The front-left bunker is the main approach hazard. Take enough club to clear it and aim middle-right of the green."},
+  {num:7, name:"Island Green",      par:3,si:14,dist:148,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Island green",c:"water"},{t:"Water all sides",c:"water"},{t:"No bail-out",c:"danger"}],
+   desc:"The signature hole. The entire green is surrounded by water with no bail-out in any direction. A drop zone is available but costs a shot. Pick your club, commit to the number, and make one smooth swing to the middle of the green. There is no other target."},
+  {num:8, name:"Difficult Driver",  par:4,si:4, dist:358,werner:1,deon:1,cilliers:1,christo:2,
+   tags:[{t:"Water right",c:"water"},{t:"Bunkers L+R",c:"bunker"},{t:"Severe slope right",c:"danger"}],
+   desc:"One of the toughest driving holes. Water hard right, fairway bunkers left — tee shot must find left-centre. Approach is long with bunkers both sides and a severe right slope. Middle of the green is the only safe target."},
+  {num:9, name:"Long Par 4",        par:4,si:2, dist:388,werner:2,deon:1,cilliers:1,christo:2,
+   tags:[{t:"Bunker left green",c:"bunker"},{t:"Right/short safer",c:"danger"}],
+   desc:"Long par 4 requiring a strong tee shot. Single bunker guards the left of the green. Aim right half — short-right is always the safer miss. Werner gets 2 strokes: gross bogey = net par, gross par = net birdie (3pts), gross birdie = net eagle (4pts)."},
+  {num:10,name:"Most Difficult",    par:4,si:3, dist:382,werner:2,deon:1,cilliers:1,christo:2,
+   tags:[{t:"Dam left",c:"water"},{t:"Bunkers right",c:"bunker"},{t:"Aim right half",c:"danger"}],
+   desc:"Toughest hole on the course but Werner has 2 strokes. Dam runs left of both fairway and green; three bunkers line the right of the fairway. Approach: right half of the green only — anything pulled left feeds the dam. Gross double = net par."},
+  {num:11,name:"Pot Bunker Par 3",  par:3,si:13,dist:151,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Pot bunker centre",c:"bunker"},{t:"Long is tough",c:"danger"}],
+   desc:"The notorious pot bunker sits front-centre — there is no short-of-green strategy. Take enough club to clear it and land on the putting surface. Going long leaves a difficult downhill chip. Centre of the green is the only target."},
+  {num:12,name:"Uphill Par 5",      par:5,si:9, dist:461,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Plays uphill",c:"danger"},{t:"Bunkers green",c:"bunker"},{t:"+1 club each shot",c:"danger"}],
+   desc:"The entire hole plays uphill — every shot plays one club longer than the measured distance. Three-shot hole. Take the extra club on every shot. Bunkers guard both sides of the green on the third. Patient, conservative management wins this hole."},
+  {num:13,name:"Bunker & Water",    par:4,si:7, dist:326,werner:1,deon:1,cilliers:1,christo:1,
+   tags:[{t:"Water right tee",c:"water"},{t:"Bunkers left",c:"bunker"},{t:"Dam right green",c:"water"}],
+   desc:"Water right of the tee, bunkers left of the fairway. Correct tee line is left-centre — bunkers are more forgiving than water. Approach: bunker left of green, dam right — aim straight at the middle of the green and commit."},
+  {num:14,name:"Narrow Green",      par:3,si:15,dist:142,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Narrow green",c:"danger"},{t:"Tough sides",c:"danger"}],
+   desc:"The green runs long and narrow away from the player. Missing either side leaves a very difficult recovery. Straight long or short of centre is far more forgiving than either side. Aim the middle of the green every time — the pin is secondary."},
+  {num:15,name:"Stroke 1 — Hardest",par:4,si:1, dist:396,werner:2,deon:1,cilliers:1,christo:2,
+   tags:[{t:"Pothole fairway",c:"bunker"},{t:"Bunkers tee",c:"bunker"},{t:"Bunker short-left",c:"bunker"}],
+   desc:"The hardest hole on the course but Werner has 2 strokes. Multiple bunkers line the tee shot and a pothole bunker sits in the middle of the fairway — know your carry and pick the right club. Approach: bunker short-left must be carried; aim middle-right. Gross bogey = net par, gross par = net birdie (3pts)."},
+  {num:16,name:"Short Bunkered",    par:4,si:17,dist:285,werner:1,deon:0,cilliers:0,christo:1,
+   tags:[{t:"4 bunkers landing",c:"bunker"},{t:"Elevated green",c:"danger"},{t:"Iron off tee",c:"danger"}],
+   desc:"Driver puts all four landing-zone bunkers in play — iron or hybrid off the tee is the right call. The elevated green means the approach plays longer than the remaining distance. Lay up to your best wedge distance and attack from there."},
+  {num:17,name:"River Crossing",    par:4,si:5, dist:354,werner:1,deon:1,cilliers:1,christo:1,
+   tags:[{t:"River carry",c:"water"},{t:"Uphill approach",c:"danger"},{t:"+1 club approach",c:"bunker"}],
+   desc:"River crosses the fairway requiring a committed carry off the tee. The approach is uphill and plays one full club longer than measured — do not underclub. Three bunkers guard the green. Commit to the carry, trust the extra club, aim centre-green."},
+  {num:18,name:"Finishing Hole",    par:5,si:11,dist:452,werner:1,deon:0,cilliers:1,christo:1,
+   tags:[{t:"Dam left green",c:"water"},{t:"River tee",c:"water"},{t:"Right side safe",c:"danger"}],
+   desc:"Par 5 finishing hole. Bunkers and river off the tee — right side of the fairway is safe all the way. Three-shot hole. Dam sits left of the green; approach must come from the right half of the fairway and aim right of centre. Finish strong and take the safe line."}
+];
+
+// ── RANKS ──────────────────────────────────────────────────────────────────────
+function buildRanks(p){
+  const t2=HOLES.filter(h=>h[p]===2).sort((a,b)=>b.si-a.si);
+  const t1=HOLES.filter(h=>h[p]===1).sort((a,b)=>b.si-a.si);
+  const t0=HOLES.filter(h=>h[p]===0).sort((a,b)=>b.si-a.si);
+  const m={};[...t2,...t1,...t0].forEach((h,i)=>{m[h.num]=i+1;});return m;
+}
+const R={w:buildRanks('werner'),d:buildRanks('deon'),c:buildRanks('cilliers'),x:buildRanks('christo')};
+
+// ── ZONES ──────────────────────────────────────────────────────────────────────
+const ZD=(()=>{
+  const s=HOLES.map(h=>{
+    const eu=R.w[h.num]+R.d[h.num],us=R.c[h.num]+R.x[h.num];
+    return{num:h.num,eu,us,diff:us-eu};
+  });
+  s.sort((a,b)=>{
+    if(b.diff!==a.diff)return b.diff-a.diff;
+    return a.diff>=0?a.eu-b.eu:b.eu-a.eu;
+  });
+  const zm={},em={},um={},dm={};
+  s.forEach((h,i)=>{zm[h.num]=i<6?'attack':i<12?'contest':'defend';em[h.num]=h.eu;um[h.num]=h.us;dm[h.num]=h.diff;});
+  return{zm,em,um,dm};
+})();
+
+const ZC={
+  attack: {label:"ATTACK",icon:"▲",cls:"attack"},
+  contest:{label:"CONT",  icon:"◆",cls:"contest"},
+  defend: {label:"BLOCK", icon:"▼",cls:"defend"},
+};
+
+// ── TEE CHARACTER ──────────────────────────────────────────────────────────────
+function teeChar(num){
+  return{1:'tight',2:'tight',4:'tight',5:'tight',6:'tight',8:'tight',
+         9:'open',10:'tight',12:'open',13:'tight',15:'tight',16:'tight',
+         17:'carry',18:'tight'}[num]||'open';
+}
+
+// ── TEE STRATEGY (par 4/5 Day 1) ──────────────────────────────────────────────
+function teeStrat(h,leader){
+  const tc=teeChar(h.num),si=h.si;
+  if(tc==='carry')
+    return `<span class="note">Tee — committed carry required.</span> Both players commit to the carry. ${leader==='deon'?'Deon':'Werner'} takes the aggressive line to the green to set up the scoring opportunity.`;
+  if(tc==='open')
+    return `<span class="hl">Tee — both go big.</span> Wide fairway, room either side. Both hit driver freely to maximise distance.`;
+  // tight
+  if(si>=10){
+    return leader==='deon'
+      ?`<span class="note">Tee — Deon anchors, Werner attacks.</span> SI ${si} — easier hole but tight off the tee. Deon secures the fairway first with iron/hybrid. Werner can then swing freely with driver.`
+      :`<span class="note">Tee — Werner anchors, Deon attacks.</span> SI ${si} — easier hole but accuracy matters. Werner hits iron/hybrid first to secure position. Deon then attacks with driver.`;
+  }
+  return `<span class="warn">Tee — both play controlled.</span> SI ${si} is a tough hole — accuracy over distance. Both hit iron or hybrid. Position first.`;
+}
+
+
+
+// ── PAR 3 STRATEGY (Day 1) ────────────────────────────────────────────────────
+function par3Strat(h,zone){
+  const wS=h.werner,dS=h.deon,cS=h.cilliers,xS=h.christo;
+  const intent=zone==='attack'?'EU has the advantage — target at least 3 points between Werner and Deon.'
+               :zone==='contest'?'Contested — EU needs at least 2 points to stay level.'
+               :'US has the advantage — EU needs at least 3 points to block their scoring.';
+  let pin='';
+  if(wS>0&&dS===0)      pin=`<span class="hl">Werner has the stroke — Werner attacks the pin.</span> Deon plays safe to the centre of the green.`;
+  else if(dS>0&&wS===0) pin=`<span class="note">Deon has the stroke — Deon attacks the pin.</span> Werner plays safe to the centre of the green as insurance.`;
+  else if(wS>0&&dS>0)   pin=`<span class="hl">Both stroke here — both can attack.</span> The player with the better rank takes the aggressive line; the other plays centre-green as backup.`;
+  else                   pin=`Neither player strokes — both play safe to the fat of the green. Two-putt par is the goal.`;
+  let threat='';
+  if(xS===2) threat+=` <span class="warn">Christo doubles here — he will be targeting this hole hard.</span>`;
+  if(cS===0) threat+=` <span class="hl">Cilliers has no stroke — EU has a relative edge over him.</span>`;
+  return `${intent}<span class="divider"></span>${pin}${threat}`;
+}
+
+// ── SCRAMBLE APPROACH STRATEGY (par 4/5 Day 1, no tee) ────────────────────────
+function scrambleApproach(h){
+  const wR=R.w[h.num],dR=R.d[h.num];
+  const leader=wR<dR?'werner':dR<wR?'deon':'equal';
+  let resp='';
+  if(leader==='werner')    resp=`<span class="hl">Werner takes the aggressive line to the green</span> to chase the birdie opportunity. Deon plays solid and conservative to keep EU in play.`;
+  else if(leader==='deon') resp=`<span class="note">Deon takes the aggressive line to the green</span> to chase the birdie opportunity. Werner plays solid and conservative to give EU two balls in play.`;
+  else                     resp=`Werner and Deon are equally ranked here — both play their own lines, best of two strong approaches counts.`;
+  let threat='';
+  if(h.christo===2&&h.werner===2) threat=` <span class="warn">Both Werner and Christo double here — direct scoring battle. Solid ball-striking to block Christo's advantage.</span>`;
+  else if(h.christo===2)          threat=` <span class="warn">Christo doubles here — EU must convert to block his points.</span>`;
+  if(h.cilliers===0)              threat+=` <span class="hl">Cilliers has no stroke — EU edge over him on this hole.</span>`;
+  return resp+threat;
+}
+
+// ── TEE SECTION (Day 1 par 4/5 only) — returned separately ──────────────────
+function getTeeSection(h){
+  const wR=R.w[h.num],dR=R.d[h.num];
+  const leader=wR<dR?'werner':dR<wR?'deon':'equal';
+  return teeStrat(h,leader);
+}
+
+// ── DAY STRATEGY — returns {tee, approach} ───────────────────────────────────
+// tee: string or null (only Day 1 par 4/5)
+// approach: main strategy string
+function getDayStrategy(h,day){
+  const zone=ZD.zm[h.num];
+  const wR=R.w[h.num],dR=R.d[h.num];
+
+  if(day===1){
+    if(h.par===3) return {tee:null, approach:par3Strat(h,zone)};
+    return {tee:getTeeSection(h), approach:scrambleApproach(h)};
+  }
+  // Day 2 & 3 — pairings not yet known
+  const zNote=zone==='attack'?'Priority hole — commit to getting your net score.'
+              :zone==='defend'?'US-favoured hole. A bogey is a solid result — grind it out.'
+              :'Steady play, take what the hole gives.';
+  let txt=`<span class="hl">Werner's scoring rank: #${wR} of 18.</span> ${zNote}`;
+  if(h.christo===2) txt+=` <span class="warn">Christo doubles here — he will be chasing points.</span>`;
+  if(h.cilliers===0) txt+=` <span class="hl">Cilliers has no stroke — EU edge over him.</span>`;
+  return {tee:null, approach:txt};
+}
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
+let currentHole=0,currentDay=1,wakeLock=null,touchStartX=0,deferredPrompt=null;
+
+// ── RENDER ─────────────────────────────────────────────────────────────────────
+function renderHole(){
+  const h=HOLES[currentHole];
+  const zone=ZD.zm[h.num],euT=ZD.em[h.num],usT=ZD.um[h.num];
+  const zcfg=ZC[zone];
+  const wLeader=R.w[h.num]<R.d[h.num],dLeader=R.d[h.num]<R.w[h.num];
+  const wNP=h.par+h.werner,dNP=h.par+h.deon;
+  const wNG=wNP-2,dNG=dNP-2;
+
+  document.getElementById('holeNum').textContent=`HOLE ${h.num}`;
+  document.getElementById('holeName').textContent=h.name;
+
+  document.getElementById('holeChips').innerHTML=
+    `<div class="h-chip"><div class="v">P${h.par}</div></div>`+
+    `<div class="h-chip"><div class="v">${h.dist}M</div></div>`+
+    `<div class="h-chip"><div class="v">SI${h.si}</div></div>`;
+
+  document.getElementById('zonePill').innerHTML=
+    `<div class="zone-pill ${zcfg.cls}">
+      <div class="zone-pill-icon">${zcfg.icon}</div>
+      <div>
+        <div class="zone-pill-label">${zcfg.label}</div>
+        <div class="zone-totals-pill">EU ${euT} · US ${usT}</div>
+      </div>
+    </div>`;
+
+  document.getElementById('holeCard').innerHTML=`
+
+    <div class="section-head">EU Scoring Opportunity</div>
+    <div class="opp-strip">
+      <div class="opp-card ${wLeader?'leader':''}">
+        <div class="opp-left"><div class="opp-rank">#${R.w[h.num]}</div></div>
+        <div class="opp-right">
+          <div class="opp-name">Werner ★${wLeader?' · Edge':''}</div>
+          <div class="opp-strokes s${h.werner}">${h.werner===2?'×2':h.werner===1?'×1':'×0'}</div>
+          <div class="opp-ng">NP <span>${wNP}</span> · NG <span>${wNG}</span></div>
+        </div>
+      </div>
+      <div class="opp-card ${dLeader?'leader':''}">
+        <div class="opp-left"><div class="opp-rank">#${R.d[h.num]}</div></div>
+        <div class="opp-right">
+          <div class="opp-name">Deon${dLeader?' · Edge':''}</div>
+          <div class="opp-strokes s${h.deon}">${h.deon===2?'×2':h.deon===1?'×1':'×0'}</div>
+          <div class="opp-ng">NP <span>${dNP}</span> · NG <span>${dNG}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head">Hazards</div>
+    <div class="hazard-row">
+      ${h.tags.map(t=>`<span class="hazard-tag ${t.c}">${t.t}</span>`).join('')}
+    </div>
+
+    ${(()=>{
+      const strat=getDayStrategy(h,currentDay);
+      let html='';
+      // Hole description
+      html+=`<div class="section-head">Hole</div><div class="strategy-box">${h.desc}</div>`;
+      // Tee strategy (Day 1 par 4/5 only)
+      if(strat.tee){
+        html+=`<div class="section-head">Tee Strategy</div><div class="strategy-box">${strat.tee}</div>`;
+      }
+      // Approach / scoring strategy
+      html+=`<div class="section-head">Scoring — Day ${currentDay}</div><div class="strategy-box">${strat.approach}</div>`;
+      return html;
+    })()}
+
+    <div class="section-head">All Players</div>
+    <div class="stroke-table">
+      <table>
+        <thead><tr><th>Player</th><th>HCI</th><th>Rank</th><th>Strokes</th><th>Net Par</th></tr></thead>
+        <tbody>
+          <tr class="is-werner">
+            <td class="eu-name">Werner ★</td><td>21</td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.w[h.num]}</td>
+            <td><span class="sb s${h.werner}">${h.werner}</span></td>
+            <td style="color:var(--accent)">${wNP}</td>
+          </tr>
+          <tr>
+            <td class="eu-name">Deon</td><td>8</td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.d[h.num]}</td>
+            <td><span class="sb s${h.deon}">${h.deon}</span></td>
+            <td style="color:var(--accent)">${dNP}</td>
+          </tr>
+          <tr>
+            <td class="us-name">Cilliers</td><td>16</td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.c[h.num]}</td>
+            <td><span class="sb s${h.cilliers}">${h.cilliers}</span></td>
+            <td style="color:var(--accent)">${h.par+h.cilliers}</td>
+          </tr>
+          <tr>
+            <td class="us-name">Christo</td><td>22</td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.x[h.num]}</td>
+            <td><span class="sb s${h.christo}">${h.christo}</span></td>
+            <td style="color:var(--accent)">${h.par+h.christo}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  document.getElementById('mainScroll').scrollTop=0;
+}
+
+function goToHole(i,dir='left'){
+  if(i<0||i>=HOLES.length)return;
+  const w=document.getElementById('cardWrapper');
+  w.classList.add(dir==='left'?'slide-left':'slide-right');
+  setTimeout(()=>{
+    currentHole=i;w.classList.remove('slide-left','slide-right');
+    renderHole();
+    if(currentHole>0)document.getElementById('swipeHint').style.opacity='0';
+  },200);
+}
+function nextHole(){goToHole(currentHole+1,'left');}
+function prevHole(){goToHole(currentHole-1,'right');}
+function setDay(d){
+  currentDay=d;
+  document.querySelectorAll('.day-btn').forEach((b,i)=>b.classList.toggle('active',i+1===d));
+  renderHole();
+}
+
+const mainEl=document.getElementById('mainScroll');
+mainEl.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;},{passive:true});
+mainEl.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  if(Math.abs(dx)>50){dx<0?nextHole():prevHole();}
+},{passive:true});
+
+async function toggleKeepAlive(){
+  const btn=document.getElementById('kaBtn');
+  if(wakeLock){
+    await wakeLock.release();wakeLock=null;
+    btn.classList.remove('active');btn.textContent='KEEP ALIVE';
+  }else{
+    try{
+      wakeLock=await navigator.wakeLock.request('screen');
+      btn.classList.add('active');btn.textContent='SCREEN ON';
+      wakeLock.addEventListener('release',()=>{btn.classList.remove('active');btn.textContent='KEEP ALIVE';wakeLock=null;});
+    }catch(e){btn.textContent='NOT SUPPORTED';setTimeout(()=>{btn.textContent='KEEP ALIVE';},2000);}
+  }
+}
+document.addEventListener('visibilitychange',async()=>{
+  if(wakeLock&&document.visibilityState==='visible'){
+    try{wakeLock=await navigator.wakeLock.request('screen');}catch(e){}
+  }
+});
+
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').classList.add('show');});
+async function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;dismissInstall();}
+function dismissInstall(){document.getElementById('installBanner').classList.remove('show');}
+
+const mfst={name:"Werner's Caddie",short_name:"Caddie",start_url:"/",display:"standalone",background_color:"#080d0b",theme_color:"#0a0f0d",orientation:"portrait",
+  icons:[
+    {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a0f0d' rx='32'/><text x='96' y='130' font-size='100' text-anchor='middle'>⛳</text></svg>",sizes:"192x192",type:"image/svg+xml"},
+    {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%230a0f0d' rx='80'/><text x='256' y='340' font-size='260' text-anchor='middle'>⛳</text></svg>",sizes:"512x512",type:"image/svg+xml"}
+  ]};
+document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(mfst)],{type:'application/json'}));
+
+renderHole();
+</script>
+</body>
+</html>
