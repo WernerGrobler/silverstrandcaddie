@@ -89,11 +89,11 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .match-chip.eu-up .v{color:#60a5fa;}
 .match-chip.us-up .v{color:#f87171;}
 .match-chip.square .v{color:#f0b030;}
-/* Zone colours — EU blue = attack, US red = defend */
-.hole-bar.attack .hole-num-circle{border-color:#1a4a7a;}
-.hole-bar.attack .hole-num-circle .v{color:#60a5fa;}
-.hole-bar.attack .h-chip .v{color:#60a5fa;}
-.hole-bar.attack .h-chip{border-color:#1a4a7a;}
+/* Zone colours — green = EU advantage (attack), red = US advantage (defend) */
+.hole-bar.attack .hole-num-circle{border-color:#1a7a3a;}
+.hole-bar.attack .hole-num-circle .v{color:#4dff8a;}
+.hole-bar.attack .h-chip .v{color:#4dff8a;}
+.hole-bar.attack .h-chip{border-color:#1a7a3a;}
 .hole-bar.contest .hole-num-circle{border-color:#b07a10;}
 .hole-bar.contest .hole-num-circle .v{color:#f0b030;}
 .hole-bar.contest .h-chip .v{color:#f0b030;}
@@ -148,12 +148,18 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .strategy-box .divider{display:block;border-top:1px solid var(--border);margin:10px 0;}
 
 /* Hazards + AIS side by side */
-.hazard-ais-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px;align-items:start;}
+.hazard-ais-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px;align-items:start;}
 .hazard-row{display:flex;flex-wrap:wrap;gap:5px;}
 .hazard-tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
 .hazard-tag.danger{border-color:#7a2020;color:#f87171;background:#1a0808;}
 .hazard-tag.water{border-color:#1a4a7a;color:#60a5fa;background:#080f1a;}
 .hazard-tag.bunker{border-color:#6b5a1a;color:#f0c060;background:#1a1405;}
+/* Intensity gauge */
+.intensity-wrap{margin-bottom:12px;display:flex;flex-direction:column;gap:5px;}
+.intensity-row{display:flex;align-items:center;gap:7px;}
+.intensity-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.5px;width:16px;flex-shrink:0;text-align:right;}
+.intensity-gauge{position:relative;height:7px;border-radius:4px;flex:1;background:linear-gradient(to right,#7a1a1a,#c03030,#2a2a2a,#1a7a3a,#1aaa5a);overflow:visible;}
+.intensity-marker{position:absolute;top:-4px;width:3px;height:15px;background:#fff;border-radius:2px;transform:translateX(-50%);box-shadow:0 0 4px rgba(0,0,0,0.8);}
 
 /* AIS button */
 .ais-btn{background:#0d2218;border:1px solid var(--accent-dim);color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;}
@@ -385,25 +391,31 @@ const HOLES=[
 const GIR_TARGET=new Set(HOLES.filter(h=>[13,14,15,16,17,18].includes(h.si)).map(h=>h.num));
 const DAY_FORMAT={1:'American Scramble Drive (both tee off, best drive selected, each plays own ball from there — better Stableford score counts for EU)',2:'2-Ball Better Ball Stableford (each plays own ball throughout, better net Stableford score per hole counts for EU)',3:'Singles Stableford (individual net Stableford, target 36+ points)'};
 
-// ── RANKS ──────────────────────────────────────────────────────────────────────
+// ── RANKS — 1=hardest scoring opportunity, 18=easiest ──────────────────────────
 function buildRanks(p){
+  // Sort: tier 2 strokes first, then tier 1, then tier 0
+  // Within each tier: highest SI first (was easiest = old rank 1)
+  // Then invert: newRank = 19 - oldRank so rank 1 = hardest, 18 = easiest
   const t2=HOLES.filter(h=>h[p]===2).sort((a,b)=>b.si-a.si);
   const t1=HOLES.filter(h=>h[p]===1).sort((a,b)=>b.si-a.si);
   const t0=HOLES.filter(h=>h[p]===0).sort((a,b)=>b.si-a.si);
-  const m={};[...t2,...t1,...t0].forEach((h,i)=>{m[h.num]=i+1;});return m;
+  const m={};[...t2,...t1,...t0].forEach((h,i)=>{m[h.num]=19-(i+1);});return m;
 }
 const R={w:buildRanks('werner'),d:buildRanks('deon'),c:buildRanks('cilliers'),x:buildRanks('christo')};
 
 // ── ZONES ──────────────────────────────────────────────────────────────────────
 const ZD=(()=>{
-  const zm={},em={},um={};
+  const zm={},em={},um={},intensity={};
   HOLES.forEach(h=>{
     const eu=R.w[h.num]+R.d[h.num],us=R.c[h.num]+R.x[h.num];
-    // Binary: EU advantage (diff>0) = attack, US advantage (diff<0) = defend, equal = contest
-    zm[h.num]=us>eu?'attack':eu>us?'defend':'contest';
+    // Higher combined rank = easier holes = scoring advantage
+    zm[h.num]=eu>us?'attack':us>eu?'defend':'contest';
     em[h.num]=eu;um[h.num]=us;
+    // Intensity based on EU combined rank (range 7–31, 1=hardest→18=easiest)
+    // 7–15 = soft, 16–23 = medium, 24–31 = full
+    intensity[h.num]=eu>=24?3:eu>=16?2:1;
   });
-  return{zm,em,um};
+  return{zm,em,um,intensity};
 })();
 
 // ── STATIC STRATEGY HELPERS ────────────────────────────────────────────────────
@@ -576,32 +588,52 @@ async function generateAIS(holeNum,day){
   const wNP=h.par+h.werner;
   const isGIRTarget=GIR_TARGET.has(h.num);
 
-  const systemPrompt=`You are a golf caddie speaking directly to Werner (use "you/your"). Be direct and tactical. No explanations of rules or scoring — Werner knows Stableford. Never mention par numbers, SI, distance, net/gross, stroke index, point values, or handicap numbers. Just say "par", "birdie", "bogey" as targets.
+  const systemPrompt=`You are Werner's caddie in a Ryder Cup match. Be direct, confident and encouraging — like a trusted caddie who believes in the player. Inspire confidence, remove pressure. Never list dangers without a solution.
 
-Never mention or reference: the match score or standing, player ranking numbers, Deon's rank, picking the best drive, or picking the best score. Werner already sees all of that on screen before reading your advice.
+Werner already sees on screen: par, SI, distance, strokes, player ranks, match score, hazards. Do NOT repeat any of this. Assume he knows the situation.
 
-DAY 1 FORMAT — AMERICAN SCRAMBLE DRIVE: Both Werner and Deon tee off every hole. They pick the best drive, then EACH plays their own ball from that spot. The better Stableford score counts for EU. Use the two-ball advantage tactically — the player with the better scoring rank attacks the pin; the other plays percentage as insurance.
+DECISION SEQUENCE — work through these steps in order:
 
-WERNER: Driver ~260m but inconsistent — misses both sides. Deon: HCI 8, very consistent, ~260m.
-MATCH CONTEXT: Adjust aggression based on match score and holes remaining. Down = attack. Up = manage. Do NOT state the score — let it shape the advice tone and targets only.
+STEP 1 — MATCH MATH (overrides everything)
+Derive posture from holes remaining vs lead/deficit:
+- Can close out now (up ≥ holes remaining): ALL OUT — finish it, go aggressive
+- Comfortable lead (up > holes/2): MANAGE — no mistakes, don't gift holes
+- Close match (level or 1 down/up): BALANCED — put pressure, take opportunities
+- Need to claw back (2-3 down): FIGHT — attack, must win holes
+- Must win nearly everything (down ≥ holes remaining - 1): ALL OUT FIGHT — attack every hole regardless of zone or intensity
 
-CRITICAL: Always incorporate the specific layout warnings from the official course notes (e.g. don't miss left, carry the bunker, avoid the dam).
+STEP 2 — ZONE + INTENSITY (shapes how to execute the posture)
+EU Intensity = EU combined scoring rank (7=hardest, 31=easiest).
+- Attack zone: EU has easier holes than US — execute posture with confidence
+- Defend zone: course is against EU — posture requires more effort, US will likely score well here too
+- Full intensity (rank 24-31): both EU players on easy holes — maximise the posture
+- Soft intensity (rank 7-15): EU on harder holes — be precise, not reckless
 
-FORMAT: Use **double asterisks** around critical warnings or key actions only (max 2 per field).
+STEP 3 — SHOT ORDER (Day 1 only)
+Safe player goes FIRST, attacker goes SECOND with safety net in place.
+ALL OUT posture: both go aggressive — Werner rips driver, Deon also attacks.
+MANAGE posture: Deon anchors with consistent drive, Werner follows safe line.
+ATTACK/FIGHT posture: Werner safe first, Deon attacks second if Werner is in play.
+Apply same logic to approach shots.
 
-STRICT CHARACTER LIMITS:
-- "tee": max 180 chars (omit key entirely if not Day 1 or no drive selection needed)
-- "strategy": max 320 chars
+STEP 4 — COURSE LAYOUT (always)
+Name the specific hazard and where to land/aim. Frame it as instruction not warning.
 
-Return JSON only, no markdown wrapper, no preamble.`;
+PLAYER CONTEXT (Day 1): Werner driver ~260m inconsistent, hybrid/iron reliable. Deon HCI 8, very consistent 260m.
+DAY 2/3: Werner individual only — ignore partner.
 
-  const userMsg=`Hole ${h.num} — ${h.name}
-Zone: ${ZD.zm[h.num].toUpperCase()} (EU ${ZD.em[h.num]} vs US ${ZD.um[h.num]})
-Werner: ${h.werner} stroke(s)${isGIRTarget?' — GIR TARGET':''}
-Deon: ${h.deon} | Cilliers: ${h.cilliers} | Christo: ${h.christo}${h.christo===2?' (DOUBLES)':''}
-Scoring ranks — Werner #${R.w[h.num]}, Deon #${R.d[h.num]}, Cilliers #${R.c[h.num]}, Christo #${R.x[h.num]}
-Match: ${ms.label} with ${ms.holesRemaining} holes remaining (Day ${day} — ${DAY_FORMAT[day].split('(')[0].trim()})
-Official course notes: ${h.notes}`;
+FORMAT: **bold** one critical hazard per field. One sentence is enough if it covers it.
+LIMITS: tee max 180 chars · strategy max 320 chars · omit tee if par 3 or Day 2/3
+Return JSON only: {"tee":"...","strategy":"..."}`;
+
+  const intensityVal=ZD.intensity[h.num];
+  const intensityLabel=intensityVal===3?'FULL (›››)':intensityVal===2?'MEDIUM (››)':'SOFT (›)';
+  const userMsg=`Hole ${h.num} — ${h.name} — Day ${day} — ${DAY_FORMAT[day].split('(')[0].trim()}
+Zone: ${ZD.zm[h.num].toUpperCase()} — EU Intensity: ${intensityLabel} (EU rank ${ZD.em[h.num]}/31)
+Werner rank #${R.w[h.num]}/18 (${h.werner} stroke${h.werner!==1?'s':''})${isGIRTarget?' · GIR TARGET':''}
+Deon rank #${R.d[h.num]}/18 (${h.deon} stroke${h.deon!==1?'s':''}) · Cilliers rank #${R.c[h.num]}/18 · Christo rank #${R.x[h.num]}/18
+Match: ${ms.label} with ${ms.holesRemaining} holes left
+Course notes: ${h.notes}`;
 
   // Show loading state in boxes
   const teeBox=document.getElementById('stratTeeBox');
@@ -1285,9 +1317,9 @@ function renderHole(){
 
   // Target Score calculation
   function getTS(rank, par, strokes){
-    if(rank<=3)  return par+strokes-2; // target net eagle = 4 pts
-    if(rank<=12) return par+strokes-1; // target net birdie = 3 pts
-    return par+strokes;                // target net par = 2 pts
+    if(rank>=16) return par+strokes-2; // easiest holes — target net eagle = 4 pts
+    if(rank>=7)  return par+strokes-1; // mid — target net birdie = 3 pts
+    return par+strokes;                // hardest holes — target net par = 2 pts
   }
   const wTS=getTS(R.w[h.num],h.par,h.werner);
   const dTS=getTS(R.d[h.num],h.par,h.deon);
@@ -1347,6 +1379,24 @@ function renderHole(){
         <span onclick="clearApiKey();alert('Key cleared')" style="font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);cursor:pointer;letter-spacing:0.5px;">reset key</span>
       </div>
     </div>
+    ${(()=>{
+      // EU gauge: rank 7(hardest/left/red) to 31(easiest/right/green)
+      const euRank=ZD.em[h.num];
+      const euPct=Math.round((euRank-7)/(31-7)*100);
+      // US gauge: same scale — US combined rank range also 7–31
+      const usRank=ZD.um[h.num];
+      const usPct=Math.round((usRank-7)/(31-7)*100);
+      return `<div class="intensity-wrap">
+        <div class="intensity-row">
+          <div class="intensity-lbl">EU</div>
+          <div class="intensity-gauge"><div class="intensity-marker" style="left:${euPct}%"></div></div>
+        </div>
+        <div class="intensity-row">
+          <div class="intensity-lbl">US</div>
+          <div class="intensity-gauge"><div class="intensity-marker" style="left:${usPct}%"></div></div>
+        </div>
+      </div>`;
+    })()}
 
     ${h.par>3&&currentDay===1?`<div class="section-head">Tee Strategy</div><div class="strategy-box" id="stratTeeBox">${strat.tee||''}</div>`:`<div id="stratTeeBox" style="display:none"></div>`}
 
