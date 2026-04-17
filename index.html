@@ -19,100 +19,240 @@
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;touch-action:pan-y;}
 
 /* HEADER */
-.header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:10px 14px 8px;display:flex;flex-direction:column;gap:8px;}
-.header-top{display:flex;align-items:center;justify-content:space-between;}
-.brand{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--accent);line-height:1;}
-.brand span{color:var(--muted);font-size:11px;font-family:'DM Mono',monospace;letter-spacing:1px;display:block;margin-top:2px;}
-.ka-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:5px 10px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:5px;}
-.ka-btn::before{content:'●';font-size:8px;color:var(--muted);}
+.header{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);padding:8px 14px;}
+.header-row1{display:flex;align-items:center;gap:5px;}
+.ka-btn{background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;padding:6px 8px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;flex-shrink:0;}
+.ka-btn::before{content:'●';font-size:7px;color:var(--muted);}
 .ka-btn.active{border-color:var(--accent-dim);color:var(--accent);background:rgba(61,255,122,0.05);}
 .ka-btn.active::before{color:var(--accent);}
-.day-selector{display:flex;gap:6px;}
-.day-btn{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:6px 4px;border-radius:6px;cursor:pointer;transition:all 0.2s;text-align:center;}
+.day-selector{display:flex;gap:4px;flex:1;}
+.day-btn{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;padding:6px 2px;border-radius:6px;cursor:pointer;transition:all 0.2s;text-align:center;letter-spacing:0.3px;}
 .day-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.day-btn.stats-btn{border-color:#b07a10;color:#f0b030;}
+.day-btn.stats-btn.active{background:#2a1800;border-color:#f0b030;color:#f0b030;}
+.day-btn.tips-btn{border-color:#3a1a7a;color:#a78bfa;}
+.day-btn.tips-btn.active{background:#1a0d3a;border-color:#7c3aed;color:#c4b5fd;}
+
+/* TIPS PAGE */
+.tips-page{padding:10px 12px 100px;}
+.tips-toggle{display:flex;gap:6px;margin-bottom:12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px;}
+.tt-btn{flex:1;font-family:'DM Mono',monospace;font-size:10px;padding:7px 4px;border-radius:5px;cursor:pointer;text-align:center;background:none;border:none;color:var(--muted);transition:all 0.15s;}
+.tt-btn.active{background:var(--accent-dim);color:var(--accent);}
+.tips-tabs{display:flex;gap:4px;margin-bottom:12px;}
+.tip-tab{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;padding:7px 2px;border-radius:6px;cursor:pointer;text-align:center;}
+.tip-tab.active{background:#1a0d3a;border-color:#7c3aed;color:#c4b5fd;}
+.tip-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.tip-cues{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.tip-cue{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--accent-dim);}
+.tip-cue.key{border-left-color:var(--accent);background:rgba(61,255,122,0.05);}
+.tip-cue-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--accent-dim);line-height:1;flex-shrink:0;width:20px;text-align:center;}
+.tip-cue.key .tip-cue-num{color:var(--accent);}
+.tip-cue-text{font-size:14px;color:var(--text);line-height:1.4;}
+.tip-cue-text strong{color:var(--accent);font-weight:600;}
+.tip-checklist{display:flex;flex-direction:column;gap:8px;}
+.tip-check{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--surface2);border-radius:8px;}
+.tip-check-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.tip-check-text{font-size:13.5px;color:var(--text);line-height:1.4;}
+.tip-check-text strong{color:var(--accent);font-weight:600;}
+.tip-divider{border:none;border-top:1px solid var(--border);margin:12px 0;}
+.tip-sub-head{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;}
+.traffic-row{display:flex;gap:6px;margin-bottom:10px;}
+.tl-chip{flex:1;border-radius:7px;padding:8px 6px;text-align:center;}
+.tl-chip.red{background:#1a0808;border:1px solid #7a2020;}
+.tl-chip.amber{background:#1a1405;border:1px solid #6b5a1a;}
+.tl-chip.green{background:#071a0e;border:1px solid #2a7a40;}
+.tl-icon{font-size:18px;line-height:1;}
+.tl-label{font-family:'DM Mono',monospace;font-size:9px;margin-top:3px;letter-spacing:0.5px;}
+.tl-chip.red .tl-label{color:#f87171;}
+.tl-chip.amber .tl-label{color:#f0c060;}
+.tl-chip.green .tl-label{color:#4dff8a;}
+.full-section{margin-bottom:14px;}
+.full-section:last-child{margin-bottom:0;}
+.full-section-head{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.full-item{font-size:13.5px;color:var(--text);line-height:1.7;padding:8px 0;}
+.full-item strong{color:var(--accent);font-weight:600;}
+.full-item+.full-item{border-top:1px solid var(--border);}
 
 /* HOLE BAR */
-.hole-bar{position:fixed;top:110px;left:0;right:0;z-index:99;background:var(--bg);padding:8px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.hole-bar{position:fixed;top:46px;left:0;right:0;z-index:99;background:var(--bg);padding:6px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);transition:top 0.25s ease;}
 .hole-nav{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.nav-btn{width:34px;height:34px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;}
+.nav-btn{width:38px;height:38px;min-width:38px;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;flex-shrink:0;}
 .nav-btn:active{background:var(--surface2);transform:scale(0.93);}
-.hole-id{flex-shrink:0;}
-.hole-label{font-family:'Bebas Neue',sans-serif;font-size:34px;line-height:1;color:var(--text);letter-spacing:2px;}
-.hole-name{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-top:1px;}
-
-/* Hole stat chips — larger, no labels */
-.hole-chips{display:flex;gap:6px;flex-shrink:0;}
-.h-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 10px;text-align:center;}
-.h-chip .v{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;color:var(--text);line-height:1;}
-
-/* Zone pill — compact, inline with hole bar */
-.zone-pill{display:flex;align-items:center;gap:6px;border-radius:8px;padding:6px 10px;border:1px solid;flex-shrink:0;margin-left:auto;}
-.zone-pill.attack{background:#071a0e;border-color:#2a7a40;}
-.zone-pill.contest{background:#1a1405;border-color:#b07a10;}
-.zone-pill.defend{background:#1a0808;border-color:#c03030;}
-.zone-pill-icon{font-size:12px;font-family:'DM Mono',monospace;}
-.zone-pill.attack .zone-pill-icon{color:#4dff8a;}
-.zone-pill.contest .zone-pill-icon{color:#f0b030;}
-.zone-pill.defend .zone-pill-icon{color:#ff6060;}
-.zone-pill-label{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1.5px;line-height:1;}
-.zone-pill.attack .zone-pill-label{color:#4dff8a;}
-.zone-pill.contest .zone-pill-label{color:#f0b030;}
-.zone-pill.defend .zone-pill-label{color:#ff6060;}
-.zone-totals-pill{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;text-align:center;}
+.hole-num-circle{width:38px;height:38px;min-width:38px;border-radius:50%;background:var(--surface);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hole-num-circle .v{font-family:'Bebas Neue',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px;line-height:1;}
+.hole-chips{display:flex;gap:5px;flex-shrink:0;}
+.h-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 8px;text-align:center;}
+.h-chip .v{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--text);line-height:1;}
+/* Match score chip */
+.match-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:5px 8px;text-align:center;margin-left:auto;flex-shrink:0;}
+.match-chip .v{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;line-height:1;white-space:nowrap;}
+.match-chip.eu-up .v{color:#60a5fa;}
+.match-chip.us-up .v{color:#f87171;}
+.match-chip.square .v{color:#f0b030;}
+/* Zone colours — EU blue = attack, US red = defend */
+.hole-bar.attack .hole-num-circle{border-color:#1a4a7a;}
+.hole-bar.attack .hole-num-circle .v{color:#60a5fa;}
+.hole-bar.attack .h-chip .v{color:#60a5fa;}
+.hole-bar.attack .h-chip{border-color:#1a4a7a;}
+.hole-bar.contest .hole-num-circle{border-color:#b07a10;}
+.hole-bar.contest .hole-num-circle .v{color:#f0b030;}
+.hole-bar.contest .h-chip .v{color:#f0b030;}
+.hole-bar.contest .h-chip{border-color:#b07a10;}
+.hole-bar.defend .hole-num-circle{border-color:#7a2020;}
+.hole-bar.defend .hole-num-circle .v{color:#f87171;}
+.hole-bar.defend .h-chip .v{color:#f87171;}
+.hole-bar.defend .h-chip{border-color:#7a2020;}
 
 /* MAIN */
-.main{position:fixed;top:172px;bottom:0;left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.card{padding:12px 14px 100px;}
+.main{position:fixed;top:104px;bottom:0;left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.card{padding:10px 12px 100px;}
 .card-wrapper{transition:transform 0.25s cubic-bezier(0.25,0.46,0.45,0.94),opacity 0.2s;}
 .card-wrapper.slide-left{transform:translateX(-30px);opacity:0;}
 .card-wrapper.slide-right{transform:translateX(30px);opacity:0;}
+.section-head{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border);}
 
-.section-head{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:7px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+/* Radial gauge */
+.gauge-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.gauge-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;}
+.gauge-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.gauge-wrap{position:relative;display:inline-block;width:100px;height:60px;overflow:visible;}
+.gauge-wrap svg{width:100px;height:60px;overflow:visible;}
+.gauge-pct{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;line-height:1;margin-top:4px;}
+.gauge-sub{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;}
 
-/* EU opportunity strip — more compact */
+/* EU opportunity strip — horizontal stat layout */
 .opp-strip{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
-.opp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:10px;}
+.opp-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;}
 .opp-card.leader{border-color:var(--accent-dim);background:rgba(61,255,122,0.04);}
-.opp-left{}
-.opp-rank{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:1px;color:var(--text);line-height:1;}
-.opp-card.leader .opp-rank{color:var(--accent);}
-.opp-right{display:flex;flex-direction:column;gap:3px;}
+.opp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
 .opp-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.5px;color:var(--muted);text-transform:uppercase;}
 .opp-card.leader .opp-name{color:var(--accent);}
-.opp-strokes{font-family:'DM Mono',monospace;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;}
-.opp-strokes.s2{background:#3a0a0a;color:#ff6060;}
-.opp-strokes.s1{background:var(--surface2);color:var(--muted);}
-.opp-strokes.s0{background:var(--surface2);color:#3a4a3a;}
-.opp-ng{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
-.opp-ng span{color:var(--accent);font-weight:500;}
+.opp-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--muted);line-height:1;}
+.opp-card.leader .opp-rank{color:var(--accent);}
+.opp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+.opp-stat{text-align:center;}
+.opp-stat-lbl{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;}
+.opp-stat-val{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--accent);line-height:1;margin-top:1px;}
+.opp-stat-val.muted{color:var(--muted);}
+.opp-strokes-pill{font-family:'DM Mono',monospace;font-size:10px;padding:2px 5px;border-radius:4px;display:inline-block;}
+.opp-strokes-pill.s2{background:#3a0a0a;color:#ff6060;}
+.opp-strokes-pill.s1{background:var(--surface2);color:var(--muted);}
+.opp-strokes-pill.s0{background:var(--surface2);color:#3a4a3a;}
+.gir-icon{font-size:11px;margin-left:3px;opacity:0.8;}
 
-/* Strategy */
+/* Strategy boxes */
 .strategy-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px;margin-bottom:12px;font-size:13.5px;line-height:1.65;color:var(--text);}
 .strategy-box .hl{color:var(--accent);font-weight:600;}
 .strategy-box .warn{color:#ff6060;font-weight:600;}
 .strategy-box .note{color:#f0b030;font-weight:600;}
 .strategy-box .divider{display:block;border-top:1px solid var(--border);margin:10px 0;}
 
-/* Hazards */
-.hazard-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+/* Hazards + AIS side by side */
+.hazard-ais-row{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:12px;align-items:start;}
+.hazard-row{display:flex;flex-wrap:wrap;gap:5px;}
 .hazard-tag{background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
 .hazard-tag.danger{border-color:#7a2020;color:#f87171;background:#1a0808;}
 .hazard-tag.water{border-color:#1a4a7a;color:#60a5fa;background:#080f1a;}
 .hazard-tag.bunker{border-color:#6b5a1a;color:#f0c060;background:#1a1405;}
 
-/* Stroke table — no team col, US net par in green */
+/* AIS button */
+.ais-btn{background:#0d2218;border:1px solid var(--accent-dim);color:var(--accent);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;}
+.ais-btn:active{background:var(--accent-dim);}
+.ais-btn.loading{opacity:0.5;pointer-events:none;}
+
+/* Strategy boxes — AIS indicator */
+.strategy-box.ais-active{border-color:#2a7a40;background:#071a0e;}
+.ais-bold{color:var(--accent);font-weight:600;}
+.ais-loading{text-align:center;padding:16px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;}
+.ais-loading::after{content:'';display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--accent);margin-left:6px;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.2;}}
+
+/* Stroke table */
 .stroke-table{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px;}
 .stroke-table table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px;}
 .stroke-table th{background:var(--surface2);color:var(--muted);font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:7px 10px;text-align:left;font-weight:400;}
 .stroke-table td{padding:8px 10px;border-top:1px solid var(--border);color:var(--text);}
-.stroke-table tr.is-werner td{background:rgba(61,255,122,0.04);}
-.stroke-table tr.is-werner td:first-child{border-left:2px solid var(--accent);padding-left:8px;}
+.stroke-table tr.row-eu td{background:#080f1a;border-left:2px solid #1a4a7a;}
+.stroke-table tr.row-eu td:first-child{padding-left:8px;}
+.stroke-table tr.row-us td{background:#1a0808;border-left:2px solid #7a2020;}
+.stroke-table tr.row-us td:first-child{padding-left:8px;}
+.stroke-table tr.is-werner td{background:rgba(96,165,250,0.06);}
+.stroke-table tr.is-werner td:first-child{border-left:2px solid #60a5fa;padding-left:8px;}
 .eu-name{color:#60a5fa;font-weight:500;}
 .us-name{color:#f87171;font-weight:500;}
 .sb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:500;}
 .sb.s0{color:var(--muted);}
 .sb.s1{background:var(--accent-dim);color:var(--accent);}
 .sb.s2{background:#c0392b;color:#fff;font-weight:700;}
+
+/* SCORE CAPTURE */
+.capture-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.capture-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+.capture-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.tog-row{display:flex;gap:5px;}
+.tog{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:7px 4px;border-radius:6px;cursor:pointer;text-align:center;transition:all 0.15s;}
+.tog.active-yes{background:#0d2a10;border-color:var(--accent);color:var(--accent);}
+.tog.active-no{background:#2a0808;border-color:#ff6060;color:#ff6060;}
+.tog.active-na{background:var(--surface2);border-color:var(--muted);color:var(--muted);}
+.tog.disabled{opacity:0.3;pointer-events:none;}
+/* Hole result toggles — blue EU, amber draw, red US */
+.tog.active-eu{background:#080f1a;border-color:#1a4a7a;color:#60a5fa;}
+.tog.active-draw{background:#1a1405;border-color:#6b5a1a;color:#f0c060;}
+.tog.active-us{background:#1a0808;border-color:#7a2020;color:#f87171;}
+.counter-row{display:flex;align-items:center;gap:8px;}
+.cnt-btn{width:32px;height:32px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:6px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;user-select:none;flex-shrink:0;}
+.cnt-btn:active{background:var(--border);}
+.cnt-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--accent);line-height:1;flex:1;text-align:center;}
+.cnt-val.at-default{color:var(--muted);}
+.capture-card.full{grid-column:1/-1;}
+.saved-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent-dim);margin-left:6px;vertical-align:middle;transition:background 0.3s;}
+.saved-dot.saved{background:var(--accent);}
+
+/* STATS PAGE */
+.stats-page{padding:12px 14px 100px;}
+.stats-filter{display:flex;gap:5px;margin-bottom:14px;}
+.sf-btn{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;padding:7px 4px;border-radius:6px;cursor:pointer;text-align:center;}
+.sf-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;text-align:center;}
+.kpi-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;}
+.kpi-val{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:1px;line-height:1;color:var(--accent);}
+.kpi-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:3px;}
+.kpi-bar-bg{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--border);}
+.kpi-bar-fill{height:100%;background:var(--accent);transition:width 0.4s;}
+/* Net score hero card */
+.net-score-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px;text-align:center;}
+.net-score-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+.net-score-val{font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:2px;line-height:1;}
+.net-score-val.under{color:#4dff8a;}
+.net-score-val.over{color:#f87171;}
+.net-score-val.even{color:var(--muted);}
+.net-score-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:4px;}
+.dist-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.dist-head{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;}
+.dist-bars{display:flex;align-items:flex-end;gap:6px;height:60px;margin-bottom:6px;}
+.dist-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.dist-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px;transition:height 0.4s;}
+.dist-bar.bird{background:#4dff8a;}
+.dist-bar.par{background:#5a7a60;}
+.dist-bar.bog{background:#f0b030;}
+.dist-bar.dbl{background:#ff6060;}
+.dist-bar.trip{background:#c03030;}
+.dist-count{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--text);}
+.dist-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.5px;}
+.par-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+.par-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;}
+.par-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:4px;}
+.par-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);line-height:1;}
+.par-diff{font-family:'DM Mono',monospace;font-size:10px;margin-top:3px;}
+.par-diff.over{color:#f0b030;}
+.par-diff.under{color:#4dff8a;}
+.par-diff.even{color:var(--muted);}
+.misc-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;}
+.misc-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;text-align:center;}
+.misc-label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px;}
+.misc-val{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);line-height:1;}
+.no-data{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center;padding:30px;letter-spacing:0.5px;}
 
 .swipe-hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);opacity:0.5;pointer-events:none;white-space:nowrap;}
 .install-banner{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:200;transform:translateY(100%);transition:transform 0.3s;}
@@ -127,35 +267,34 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-top">
-    <div class="brand">CADDIE<span>Werner · Old Schoolers Ryder Cup</span></div>
-    <button class="ka-btn" id="kaBtn" onclick="toggleKeepAlive()">KEEP ALIVE</button>
-  </div>
-  <div class="day-selector">
-    <button class="day-btn active" onclick="setDay(1)">DAY 1 · SCRAMBLE</button>
-    <button class="day-btn" onclick="setDay(2)">DAY 2 · BETTER BALL</button>
-    <button class="day-btn" onclick="setDay(3)">DAY 3 · SINGLES</button>
+<div class="header" id="mainHeader">
+  <div class="header-row1">
+    <div class="day-selector">
+      <button class="day-btn active" onclick="setDay(1)">DAY 1</button>
+      <button class="day-btn" onclick="setDay(2)">DAY 2</button>
+      <button class="day-btn" onclick="setDay(3)">DAY 3</button>
+      <button class="day-btn stats-btn" onclick="showStats()">STATS</button>
+      <button class="day-btn tips-btn" onclick="showTips()">TIPS</button>
+    </div>
+    <button class="ka-btn" id="kaBtn" onclick="toggleKeepAlive()">ALIVE</button>
   </div>
 </div>
 
 <div class="hole-bar" id="holeBar">
   <div class="hole-nav">
     <button class="nav-btn" onclick="prevHole()">‹</button>
-    <div class="hole-id">
-      <div class="hole-label" id="holeNum">HOLE 1</div>
-      <div class="hole-name" id="holeName">Blue Gum</div>
+    <div class="hole-num-circle" id="holeNumCircle">
+      <span class="v" id="holeNum">1</span>
     </div>
     <button class="nav-btn" onclick="nextHole()">›</button>
   </div>
   <div class="hole-chips" id="holeChips"></div>
-  <div id="zonePill"></div>
+  <div id="matchChip"></div>
 </div>
 
 <div class="main" id="mainScroll">
   <div class="card-wrapper" id="cardWrapper">
-    <div class="card" id="holeCard"></div>
+    <div id="holeCard"></div>
   </div>
 </div>
 
@@ -167,62 +306,84 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 </div>
 
 <script>
+// ── HOLES ──────────────────────────────────────────────────────────────────────
 const HOLES=[
   {num:1, name:"Blue Gum",         par:5,si:18,dist:414,werner:1,deon:0,cilliers:0,christo:1,
    tags:[{t:"Canal left",c:"water"},{t:"Bunkers green",c:"bunker"},{t:"OOB left",c:"danger"}],
-   desc:"Long par 5 — three shots for everyone. Canal runs the entire left side. Ideal tee line is just right of the blue gum tree. No heroics on the second shot; lay up comfortably to leave a full third shot into a well-bunkered green."},
+   desc:"Long par 5 — three shots for everyone. Canal runs the entire left side. Ideal tee line is just right of the blue gum tree. No heroics on the second shot; lay up comfortably to leave a full third shot into a well-bunkered green.",
+   notes:"Aim just right of the blue gum tree. Beware of the canal on the left. Green is guarded with deep bunkers on the left and right side."},
   {num:2, name:"Tree-lined",        par:4,si:12,dist:308,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"OOB left",c:"danger"},{t:"Trees right",c:"bunker"},{t:"No run-up",c:"danger"}],
-   desc:"Short par 4 — short iron approach. OOB is hard left, trees right act as a guide. Green does not accept run-up shots — trees behind kill any bounce-through. Commit to a flying shot and stop it on the green."},
+   desc:"Short par 4 — short iron approach. OOB is hard left, trees right act as a guide. Green does not accept run-up shots — trees behind kill any bounce-through. Commit to a flying shot and stop it on the green.",
+   notes:"OOB on the left and trees on the right. After a good tee shot you are left with a short iron to the green. Do not go long because of low hanging trees at the back of the green."},
   {num:3, name:"River Par 3",       par:3,si:16,dist:131,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Grass bank left",c:"bunker"},{t:"Bunkers right",c:"bunker"},{t:"Wind factor",c:"danger"}],
-   desc:"Short par 3 but wind can make it play significantly longer. Grass bank guards the left, two bunkers right. Club selection is the most important decision here — commit to the number and make a smooth swing to the centre of the green."},
+   desc:"Short par 3 but wind can make it play significantly longer. Grass bank guards the left, two bunkers right. Club selection is the most important decision here — commit to the number and make a smooth swing to the centre of the green.",
+   notes:"The river comes into play for bad tee shots. Green is guarded with a grass bank on the left and two bunkers on the right. Delicate chip shot if you miss the green."},
   {num:4, name:"Elevated Green",    par:4,si:6, dist:350,werner:1,deon:1,cilliers:1,christo:1,
    tags:[{t:"Water right",c:"water"},{t:"Elevated green",c:"danger"},{t:"Bunker left",c:"bunker"}],
-   desc:"Elevated green adds effective distance on the approach — always take one extra club. Bail out right off the tee if uncertain; trouble is left. Water right of the green, bunker left — aim centre and let the elevation work in your favour."},
+   desc:"Elevated green adds effective distance on the approach — always take one extra club. Bail out right off the tee if uncertain; trouble is left. Water right of the green, bunker left — aim centre and let the elevation work in your favour.",
+   notes:"Standing on the tee all your problems are to the left and lots of bail out space to the right. Elevated green requires accurate shot with water on the right and bunker on the left."},
   {num:5, name:"Bunker Par 5",      par:5,si:8, dist:475,werner:1,deon:1,cilliers:1,christo:1,
    tags:[{t:"Fairway bunkers",c:"bunker"},{t:"Elevated green",c:"danger"},{t:"Left penalty",c:"danger"}],
-   desc:"Long par 5, three-shot hole for all. Two fairway bunkers threaten the tee shot. Third shot into an elevated green: missing left is a severe penalty, missing right is recoverable. Three-shot discipline wins this hole."},
+   desc:"Long par 5, three-shot hole for all. Two fairway bunkers threaten the tee shot. Third shot into an elevated green: missing left is a severe penalty, missing right is recoverable. Three-shot discipline wins this hole.",
+   notes:"Two fairway bunkers in play with the tee shot. After an accurate second shot you are left with a short iron to an elevated green. Do not miss the green to the left as it will leave you with a difficult pitch."},
   {num:6, name:"Short Par 4",       par:4,si:10,dist:308,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Fairway bunkers",c:"bunker"},{t:"Bunker front-left",c:"bunker"}],
-   desc:"Short par 4 with a wedge or short iron approach. Two fairway bunkers frame the tee shot. The front-left bunker is the main approach hazard. Take enough club to clear it and aim middle-right of the green."},
+   desc:"Short par 4 with a wedge or short iron approach. Two fairway bunkers frame the tee shot. The front-left bunker is the main approach hazard. Take enough club to clear it and aim middle-right of the green.",
+   notes:"Short par 4 with lots of space standing on the tee. Two fairway bunkers are in play for the longer hitters. Stay out of the difficult bunker front left of the green. One of the easier holes on the course."},
   {num:7, name:"Island Green",      par:3,si:14,dist:148,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Island green",c:"water"},{t:"Water all sides",c:"water"},{t:"No bail-out",c:"danger"}],
-   desc:"The signature hole. The entire green is surrounded by water with no bail-out in any direction. A drop zone is available but costs a shot. Pick your club, commit to the number, and make one smooth swing to the middle of the green. There is no other target."},
+   desc:"The signature hole. The entire green is surrounded by water with no bail-out. Pick your club, commit to the number, and make one smooth swing to the middle of the green. There is no other target.",
+   notes:"Signature par 3 with island green surrounded by water. Requires an accurate tee shot. If you find the water, you are still left with a challenging pitch. Playing a par is a good score."},
   {num:8, name:"Difficult Driver",  par:4,si:4, dist:358,werner:1,deon:1,cilliers:1,christo:2,
    tags:[{t:"Water right",c:"water"},{t:"Bunkers L+R",c:"bunker"},{t:"Severe slope right",c:"danger"}],
-   desc:"One of the toughest driving holes. Water hard right, fairway bunkers left — tee shot must find left-centre. Approach is long with bunkers both sides and a severe right slope. Middle of the green is the only safe target."},
+   desc:"One of the toughest driving holes. Water hard right, fairway bunkers left — tee shot must find left-centre. Approach is long with bunkers both sides and a severe right slope. Middle of the green is the only safe target.",
+   notes:"Difficult driving hole with water on the right and fairway bunkers on the left. After a good drive you are still faced with a long accurate second shot. There is a severe slope if you miss your shot to the right with bunkers left and right of the green."},
   {num:9, name:"Long Par 4",        par:4,si:2, dist:388,werner:2,deon:1,cilliers:1,christo:2,
    tags:[{t:"Bunker left green",c:"bunker"},{t:"Right/short safer",c:"danger"}],
-   desc:"Long par 4 requiring a strong tee shot. Single bunker guards the left of the green. Aim right half — short-right is always the safer miss. Werner gets 2 strokes: gross bogey = net par, gross par = net birdie (3pts), gross birdie = net eagle (4pts)."},
+   desc:"Long par 4 requiring a strong tee shot. Single bunker guards the left of the green. Aim right half — short-right is always the safer miss.",
+   notes:"One of the longer par 4s on the course. After a good tee shot you are still faced with a long shot to the green, guarded with a bunker on the left. If you miss the green, smart play will be short or to the right."},
   {num:10,name:"Most Difficult",    par:4,si:3, dist:382,werner:2,deon:1,cilliers:1,christo:2,
    tags:[{t:"Dam left",c:"water"},{t:"Bunkers right",c:"bunker"},{t:"Aim right half",c:"danger"}],
-   desc:"Toughest hole on the course but Werner has 2 strokes. Dam runs left of both fairway and green; three bunkers line the right of the fairway. Approach: right half of the green only — anything pulled left feeds the dam. Gross double = net par."},
+   desc:"Toughest hole on the course but Werner has 2 strokes. Dam runs left of both fairway and green; three bunkers line the right of the fairway. Approach: right half of the green only — anything pulled left feeds the dam.",
+   notes:"One of the most difficult holes on the course. Beware of the three bunkers to the right-hand side of the fairway and the dam on the left. Do not miss the green to the left, as it will leave you with a difficult pitch."},
   {num:11,name:"Pot Bunker Par 3",  par:3,si:13,dist:151,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Pot bunker centre",c:"bunker"},{t:"Long is tough",c:"danger"}],
-   desc:"The notorious pot bunker sits front-centre — there is no short-of-green strategy. Take enough club to clear it and land on the putting surface. Going long leaves a difficult downhill chip. Centre of the green is the only target."},
+   desc:"The notorious pot bunker sits front-centre — there is no short-of-green strategy. Take enough club to clear it and land on the putting surface. Going long leaves a difficult downhill chip. Centre of the green is the only target.",
+   notes:"Requires tee shot with good distance control. The pot bunker in front of the green is very much in play. Over the green leaves you with a challenging shot."},
   {num:12,name:"Uphill Par 5",      par:5,si:9, dist:461,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Plays uphill",c:"danger"},{t:"Bunkers green",c:"bunker"},{t:"+1 club each shot",c:"danger"}],
-   desc:"The entire hole plays uphill — every shot plays one club longer than the measured distance. Three-shot hole. Take the extra club on every shot. Bunkers guard both sides of the green on the third. Patient, conservative management wins this hole."},
+   desc:"The entire hole plays uphill — every shot plays one club longer than the measured distance. Three-shot hole. Take the extra club on every shot. Bunkers guard both sides of the green on the third. Patient management wins this hole.",
+   notes:"A slightly uphill hole that requires an accurate tee shot to the left of the fairway bunkers. This hole is well bunkered to the right and left of the green. Do not miss the green to the right or left as it will leave you with a difficult pitch."},
   {num:13,name:"Bunker & Water",    par:4,si:7, dist:326,werner:1,deon:1,cilliers:1,christo:1,
    tags:[{t:"Water right tee",c:"water"},{t:"Bunkers left",c:"bunker"},{t:"Dam right green",c:"water"}],
-   desc:"Water right of the tee, bunkers left of the fairway. Correct tee line is left-centre — bunkers are more forgiving than water. Approach: bunker left of green, dam right — aim straight at the middle of the green and commit."},
+   desc:"Water right of the tee, bunkers left of the fairway. Correct tee line is left-centre. Approach: bunker left of green, dam right — aim straight at the middle of the green and commit.",
+   notes:"A shorter hole with bunkers on the left and water on the right when you stand on the tee box. Rather miss the fairway to the left. An accurate approach shot is required because of a bunker to the left and dam to the right of the green."},
   {num:14,name:"Narrow Green",      par:3,si:15,dist:142,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Narrow green",c:"danger"},{t:"Tough sides",c:"danger"}],
-   desc:"The green runs long and narrow away from the player. Missing either side leaves a very difficult recovery. Straight long or short of centre is far more forgiving than either side. Aim the middle of the green every time — the pin is secondary."},
+   desc:"The green runs long and narrow away from the player. Missing either side leaves a very difficult recovery. Straight long or short of centre is far more forgiving than either side. Aim the middle of the green every time.",
+   notes:"You are faced with a long and narrow green when standing on the tee box. Difficult pitch if you miss the green to the left or right. Playing a par on this hole is an excellent score."},
   {num:15,name:"Stroke 1 — Hardest",par:4,si:1, dist:396,werner:2,deon:1,cilliers:1,christo:2,
    tags:[{t:"Pothole fairway",c:"bunker"},{t:"Bunkers tee",c:"bunker"},{t:"Bunker short-left",c:"bunker"}],
-   desc:"The hardest hole on the course but Werner has 2 strokes. Multiple bunkers line the tee shot and a pothole bunker sits in the middle of the fairway — know your carry and pick the right club. Approach: bunker short-left must be carried; aim middle-right. Gross bogey = net par, gross par = net birdie (3pts)."},
+   desc:"The hardest hole on the course but Werner has 2 strokes. Pothole bunker in the middle of the fairway — know your carry. Approach: bunker short-left must be carried; aim middle-right.",
+   notes:"Long and difficult hole with lots of bunkers in play with your tee shot. Finding the fairway to set up a par is very important. Pothole bunker in the middle of the fairway is in play for the shorter hitters. Beware of the bunker short left on the green."},
   {num:16,name:"Short Bunkered",    par:4,si:17,dist:285,werner:1,deon:0,cilliers:0,christo:1,
    tags:[{t:"4 bunkers landing",c:"bunker"},{t:"Elevated green",c:"danger"},{t:"Iron off tee",c:"danger"}],
-   desc:"Driver puts all four landing-zone bunkers in play — iron or hybrid off the tee is the right call. The elevated green means the approach plays longer than the remaining distance. Lay up to your best wedge distance and attack from there."},
+   desc:"Driver puts all four landing-zone bunkers in play — iron or hybrid off the tee is the right call. The elevated green means the approach plays longer than the remaining distance. Lay up to your best wedge distance and attack from there.",
+   notes:"One of the shorter holes on the course. You do not have to use a driver off the tee because of the 4 bunkers well positioned. An accurate shot to an elevated green will set up an easy par or possible birdie."},
   {num:17,name:"River Crossing",    par:4,si:5, dist:354,werner:1,deon:1,cilliers:1,christo:1,
    tags:[{t:"River carry",c:"water"},{t:"Uphill approach",c:"danger"},{t:"+1 club approach",c:"bunker"}],
-   desc:"River crosses the fairway requiring a committed carry off the tee. The approach is uphill and plays one full club longer than measured — do not underclub. Three bunkers guard the green. Commit to the carry, trust the extra club, aim centre-green."},
+   desc:"River crosses the fairway requiring a committed carry off the tee. The approach is uphill and plays one full club longer than measured — do not underclub. Three bunkers guard the green. Commit to the carry, trust the extra club, aim centre-green.",
+   notes:"A river running across the fairway means that the driver is sometimes not the right club, depending on the wind. Your second shot is slightly uphill, and this hole is playing one club longer than you think. The green is guarded by three bunkers."},
   {num:18,name:"Finishing Hole",    par:5,si:11,dist:452,werner:1,deon:0,cilliers:1,christo:1,
    tags:[{t:"Dam left green",c:"water"},{t:"River tee",c:"water"},{t:"Right side safe",c:"danger"}],
-   desc:"Par 5 finishing hole. Bunkers and river off the tee — right side of the fairway is safe all the way. Three-shot hole. Dam sits left of the green; approach must come from the right half of the fairway and aim right of centre. Finish strong and take the safe line."}
+   desc:"Par 5 finishing hole. Bunkers and river off the tee — right side is safe all the way. Dam sits left of the green; approach from the right half and aim right of centre. Finish strong and take the safe line.",
+   notes:"Bunkers and the river are in play standing on the tee box. After a good drive you are left with an accurate approach shot. Do not miss the green to the left because the dam is very much in play. Good finishing hole."}
 ];
+
+const GIR_TARGET=new Set(HOLES.filter(h=>[13,14,15,16,17,18].includes(h.si)).map(h=>h.num));
+const DAY_FORMAT={1:'American Scramble Drive (both tee off, best drive selected, each plays own ball from there — better Stableford score counts for EU)',2:'2-Ball Better Ball Stableford (each plays own ball throughout, better net Stableford score per hole counts for EU)',3:'Singles Stableford (individual net Stableford, target 36+ points)'};
 
 // ── RANKS ──────────────────────────────────────────────────────────────────────
 function buildRanks(p){
@@ -235,217 +396,926 @@ const R={w:buildRanks('werner'),d:buildRanks('deon'),c:buildRanks('cilliers'),x:
 
 // ── ZONES ──────────────────────────────────────────────────────────────────────
 const ZD=(()=>{
-  const s=HOLES.map(h=>{
+  const zm={},em={},um={};
+  HOLES.forEach(h=>{
     const eu=R.w[h.num]+R.d[h.num],us=R.c[h.num]+R.x[h.num];
-    return{num:h.num,eu,us,diff:us-eu};
+    // Binary: EU advantage (diff>0) = attack, US advantage (diff<0) = defend, equal = contest
+    zm[h.num]=us>eu?'attack':eu>us?'defend':'contest';
+    em[h.num]=eu;um[h.num]=us;
   });
-  s.sort((a,b)=>{
-    if(b.diff!==a.diff)return b.diff-a.diff;
-    return a.diff>=0?a.eu-b.eu:b.eu-a.eu;
-  });
-  const zm={},em={},um={},dm={};
-  s.forEach((h,i)=>{zm[h.num]=i<6?'attack':i<12?'contest':'defend';em[h.num]=h.eu;um[h.num]=h.us;dm[h.num]=h.diff;});
-  return{zm,em,um,dm};
+  return{zm,em,um};
 })();
 
-const ZC={
-  attack: {label:"ATTACK",icon:"▲",cls:"attack"},
-  contest:{label:"CONT",  icon:"◆",cls:"contest"},
-  defend: {label:"BLOCK", icon:"▼",cls:"defend"},
-};
-
-// ── TEE CHARACTER ──────────────────────────────────────────────────────────────
-function teeChar(num){
-  return{1:'tight',2:'tight',4:'tight',5:'tight',6:'tight',8:'tight',
-         9:'open',10:'tight',12:'open',13:'tight',15:'tight',16:'tight',
-         17:'carry',18:'tight'}[num]||'open';
-}
-
-// ── TEE STRATEGY (par 4/5 Day 1) ──────────────────────────────────────────────
+// ── STATIC STRATEGY HELPERS ────────────────────────────────────────────────────
+function teeChar(num){return{1:'tight',2:'tight',4:'tight',5:'tight',6:'tight',8:'tight',9:'open',10:'tight',12:'open',13:'tight',15:'tight',16:'tight',17:'carry',18:'tight'}[num]||'open';}
 function teeStrat(h,leader){
   const tc=teeChar(h.num),si=h.si;
-  if(tc==='carry')
-    return `<span class="note">Tee — committed carry required.</span> Both players commit to the carry. ${leader==='deon'?'Deon':'Werner'} takes the aggressive line to the green to set up the scoring opportunity.`;
-  if(tc==='open')
-    return `<span class="hl">Tee — both go big.</span> Wide fairway, room either side. Both hit driver freely to maximise distance.`;
-  // tight
-  if(si>=10){
-    return leader==='deon'
-      ?`<span class="note">Tee — Deon anchors, Werner attacks.</span> SI ${si} — easier hole but tight off the tee. Deon secures the fairway first with iron/hybrid. Werner can then swing freely with driver.`
-      :`<span class="note">Tee — Werner anchors, Deon attacks.</span> SI ${si} — easier hole but accuracy matters. Werner hits iron/hybrid first to secure position. Deon then attacks with driver.`;
-  }
-  return `<span class="warn">Tee — both play controlled.</span> SI ${si} is a tough hole — accuracy over distance. Both hit iron or hybrid. Position first.`;
+  if(tc==='carry') return `<span class="note">Tee — committed carry required.</span> Both players commit to the carry. ${leader==='deon'?'Deon':'Werner'} takes the aggressive line to the green.`;
+  if(tc==='open')  return `<span class="hl">Tee — both go big.</span> Wide fairway with room either side. Both hit driver freely.`;
+  if(si>=10) return leader==='deon'
+    ?`<span class="note">Tee — Deon anchors, Werner attacks.</span> SI ${si} easier hole but tight off the tee. Deon secures the fairway first with iron/hybrid. Werner can then swing freely.`
+    :`<span class="note">Tee — Werner anchors, Deon attacks.</span> SI ${si} — easier hole but accuracy matters. Werner hits iron/hybrid first to secure position. Deon then attacks.`;
+  return `<span class="warn">Tee — both play controlled.</span> SI ${si} is a tough hole — accuracy over distance. Both hit iron or hybrid.`;
 }
-
-
-
-// ── PAR 3 STRATEGY (Day 1) ────────────────────────────────────────────────────
 function par3Strat(h,zone){
   const wS=h.werner,dS=h.deon,cS=h.cilliers,xS=h.christo;
   const intent=zone==='attack'?'EU has the advantage — target at least 3 points between Werner and Deon.'
-               :zone==='contest'?'Contested — EU needs at least 2 points to stay level.'
-               :'US has the advantage — EU needs at least 3 points to block their scoring.';
+    :zone==='contest'?'Contested — EU needs at least 2 points to stay level.'
+    :'US has the advantage — EU needs at least 3 points to block their scoring.';
   let pin='';
-  if(wS>0&&dS===0)      pin=`<span class="hl">Werner has the stroke — Werner attacks the pin.</span> Deon plays safe to the centre of the green.`;
+  if(wS>0&&dS===0)    pin=`<span class="hl">Werner has the stroke — Werner attacks the pin.</span> Deon plays safe to the centre of the green.`;
   else if(dS>0&&wS===0) pin=`<span class="note">Deon has the stroke — Deon attacks the pin.</span> Werner plays safe to the centre of the green as insurance.`;
-  else if(wS>0&&dS>0)   pin=`<span class="hl">Both stroke here — both can attack.</span> The player with the better rank takes the aggressive line; the other plays centre-green as backup.`;
-  else                   pin=`Neither player strokes — both play safe to the fat of the green. Two-putt par is the goal.`;
+  else if(wS>0&&dS>0) pin=`<span class="hl">Both stroke here — both can attack.</span> Better-ranked player takes the aggressive line; other plays centre-green as backup.`;
+  else                pin=`Neither player strokes — both play safe to the fat of the green. Two-putt par is the goal.`;
   let threat='';
-  if(xS===2) threat+=` <span class="warn">Christo doubles here — he will be targeting this hole hard.</span>`;
-  if(cS===0) threat+=` <span class="hl">Cilliers has no stroke — EU has a relative edge over him.</span>`;
+  if(xS===2) threat+=` <span class="warn">Christo doubles here.</span>`;
+  if(cS===0) threat+=` <span class="hl">Cilliers no stroke — EU relative edge.</span>`;
   return `${intent}<span class="divider"></span>${pin}${threat}`;
 }
-
-// ── SCRAMBLE APPROACH STRATEGY (par 4/5 Day 1, no tee) ────────────────────────
 function scrambleApproach(h){
   const wR=R.w[h.num],dR=R.d[h.num];
   const leader=wR<dR?'werner':dR<wR?'deon':'equal';
-  let resp='';
-  if(leader==='werner')    resp=`<span class="hl">Werner takes the aggressive line to the green</span> to chase the birdie opportunity. Deon plays solid and conservative to keep EU in play.`;
-  else if(leader==='deon') resp=`<span class="note">Deon takes the aggressive line to the green</span> to chase the birdie opportunity. Werner plays solid and conservative to give EU two balls in play.`;
-  else                     resp=`Werner and Deon are equally ranked here — both play their own lines, best of two strong approaches counts.`;
+  let resp=leader==='werner'
+    ?`<span class="hl">Werner takes the aggressive line to the green</span> to chase the birdie. Deon plays solid and conservative.`
+    :leader==='deon'
+    ?`<span class="note">Deon takes the aggressive line to the green</span> to chase the birdie. Werner plays solid and conservative.`
+    :`Werner and Deon equally ranked — both play their own lines, best approach counts.`;
   let threat='';
-  if(h.christo===2&&h.werner===2) threat=` <span class="warn">Both Werner and Christo double here — direct scoring battle. Solid ball-striking to block Christo's advantage.</span>`;
-  else if(h.christo===2)          threat=` <span class="warn">Christo doubles here — EU must convert to block his points.</span>`;
-  if(h.cilliers===0)              threat+=` <span class="hl">Cilliers has no stroke — EU edge over him on this hole.</span>`;
+  if(h.christo===2&&h.werner===2) threat=` <span class="warn">Both Werner and Christo double — direct scoring battle. Solid ball-striking to block Christo.</span>`;
+  else if(h.christo===2) threat=` <span class="warn">Christo doubles here — EU must convert to block.</span>`;
+  if(h.cilliers===0) threat+=` <span class="hl">Cilliers no stroke — EU edge over him.</span>`;
   return resp+threat;
 }
-
-// ── TEE SECTION (Day 1 par 4/5 only) — returned separately ──────────────────
-function getTeeSection(h){
-  const wR=R.w[h.num],dR=R.d[h.num];
+function getStaticStrategy(h,day){
+  const zone=ZD.zm[h.num],wR=R.w[h.num],dR=R.d[h.num];
   const leader=wR<dR?'werner':dR<wR?'deon':'equal';
-  return teeStrat(h,leader);
-}
-
-// ── DAY STRATEGY — returns {tee, approach} ───────────────────────────────────
-// tee: string or null (only Day 1 par 4/5)
-// approach: main strategy string
-function getDayStrategy(h,day){
-  const zone=ZD.zm[h.num];
-  const wR=R.w[h.num],dR=R.d[h.num];
-
   if(day===1){
-    if(h.par===3) return {tee:null, approach:par3Strat(h,zone)};
-    return {tee:getTeeSection(h), approach:scrambleApproach(h)};
+    if(h.par===3)return{tee:null,approach:par3Strat(h,zone)};
+    return{tee:teeStrat(h,leader),approach:scrambleApproach(h)};
   }
-  // Day 2 & 3 — pairings not yet known
   const zNote=zone==='attack'?'Priority hole — commit to getting your net score.'
-              :zone==='defend'?'US-favoured hole. A bogey is a solid result — grind it out.'
-              :'Steady play, take what the hole gives.';
+    :zone==='defend'?'US-favoured hole. Bogey is a solid result.'
+    :'Steady play, take what the hole gives.';
   let txt=`<span class="hl">Werner's scoring rank: #${wR} of 18.</span> ${zNote}`;
-  if(h.christo===2) txt+=` <span class="warn">Christo doubles here — he will be chasing points.</span>`;
-  if(h.cilliers===0) txt+=` <span class="hl">Cilliers has no stroke — EU edge over him.</span>`;
-  return {tee:null, approach:txt};
+  if(h.christo===2) txt+=` <span class="warn">Christo doubles here.</span>`;
+  if(h.cilliers===0) txt+=` <span class="hl">Cilliers no stroke — EU edge.</span>`;
+  return{tee:null,approach:txt};
 }
 
-// ── STATE ──────────────────────────────────────────────────────────────────────
-let currentHole=0,currentDay=1,wakeLock=null,touchStartX=0,deferredPrompt=null;
+// ── MATCH SCORE ────────────────────────────────────────────────────────────────
+// Stored per day as array of 18 hole results: 'eu'|'draw'|'us'|null
+function matchKey(day){return `match_d${day}`;}
+function loadMatch(day){
+  try{const r=localStorage.getItem(matchKey(day));return r?JSON.parse(r):Array(18).fill(null);}
+  catch(e){return Array(18).fill(null);}
+}
+function saveMatch(day,arr){try{localStorage.setItem(matchKey(day),JSON.stringify(arr));}catch(e){}}
 
-// ── RENDER ─────────────────────────────────────────────────────────────────────
-function renderHole(){
+function calcMatchScore(day,upToHole){
+  const results=loadMatch(day);
+  let eu=0,us=0;
+  for(let i=0;i<upToHole;i++){
+    if(results[i]==='eu')eu++;
+    else if(results[i]==='us')us++;
+  }
+  const diff=eu-us;
+  const holesRemaining=18-upToHole;
+  if(diff===0)return{label:'A/S',cls:'square',diff:0,holesRemaining};
+  if(diff>0)return{label:`${diff} UP`,cls:'eu-up',diff,holesRemaining};
+  return{label:`${Math.abs(diff)} DN`,cls:'us-up',diff,holesRemaining};
+}
+
+
+function updateMatchResult(day,holeIdx,result){
+  const arr=loadMatch(day);
+  arr[holeIdx]=arr[holeIdx]===result?null:result;
+  saveMatch(day,arr);
   const h=HOLES[currentHole];
-  const zone=ZD.zm[h.num],euT=ZD.em[h.num],usT=ZD.um[h.num];
-  const zcfg=ZC[zone];
-  const wLeader=R.w[h.num]<R.d[h.num],dLeader=R.d[h.num]<R.w[h.num];
-  const wNP=h.par+h.werner,dNP=h.par+h.deon;
-  const wNG=wNP-2,dNG=dNP-2;
+  const container=document.getElementById(`capture_${h.num}`);
+  if(container)container.innerHTML=renderCapture(h,day);
+  // Recalculate from scratch and update chip immediately
+  const ms=calcMatchScore(day,18);
+  const el=document.getElementById('matchChip');
+  if(el){
+    // Show running score up to and including this hole
+    const running=calcMatchScore(day,holeIdx+1);
+    el.innerHTML=`<div class="match-chip ${running.cls}"><div class="v">${running.label}</div></div>`;
+  }
+}
 
-  document.getElementById('holeNum').textContent=`HOLE ${h.num}`;
-  document.getElementById('holeName').textContent=h.name;
+function renderMatchChip(){
+  const ms=calcMatchScore(currentDay,currentHole+1);
+  const el=document.getElementById('matchChip');
+  if(!el)return;
+  el.innerHTML=`<div class="match-chip ${ms.cls}"><div class="v">${ms.label}</div></div>`;
+}
 
-  document.getElementById('holeChips').innerHTML=
-    `<div class="h-chip"><div class="v">P${h.par}</div></div>`+
-    `<div class="h-chip"><div class="v">${h.dist}M</div></div>`+
-    `<div class="h-chip"><div class="v">SI${h.si}</div></div>`;
+// ── AIS (AI STRATEGY) ─────────────────────────────────────────────────────────
+// Persisted per day+hole: {text, generated_at}
+const aisCache={};
+function aisKey(day,holeNum){return `ais_d${day}_h${holeNum}`;}
+function loadAIS(day,holeNum){
+  if(aisCache[aisKey(day,holeNum)])return aisCache[aisKey(day,holeNum)];
+  try{const r=localStorage.getItem(aisKey(day,holeNum));if(r){const p=JSON.parse(r);aisCache[aisKey(day,holeNum)]=p;return p;}}
+  catch(e){}
+  return null;
+}
+function saveAIS(day,holeNum,data){
+  aisCache[aisKey(day,holeNum)]=data;
+  try{localStorage.setItem(aisKey(day,holeNum),JSON.stringify(data));}catch(e){}
+}
+function clearAIS(day,holeNum){
+  delete aisCache[aisKey(day,holeNum)];
+  try{localStorage.removeItem(aisKey(day,holeNum));}catch(e){}
+}
 
-  document.getElementById('zonePill').innerHTML=
-    `<div class="zone-pill ${zcfg.cls}">
-      <div class="zone-pill-icon">${zcfg.icon}</div>
-      <div>
-        <div class="zone-pill-label">${zcfg.label}</div>
-        <div class="zone-totals-pill">EU ${euT} · US ${usT}</div>
+async function generateAIS(holeNum,day){
+  const h=HOLES[holeNum-1];
+  const zone=ZD.zm[h.num];
+  const ms=calcMatchScore(day,currentHole);
+  const wNP=h.par+h.werner;
+  const isGIRTarget=GIR_TARGET.has(h.num);
+
+  const systemPrompt=`You are a golf caddie speaking directly to Werner (use "you/your"). Be direct and tactical. No explanations of rules or scoring — Werner knows Stableford. Never mention par numbers, SI, distance, net/gross, stroke index, point values, or handicap numbers. Just say "par", "birdie", "bogey" as targets.
+
+Never mention or reference: the match score or standing, player ranking numbers, Deon's rank, picking the best drive, or picking the best score. Werner already sees all of that on screen before reading your advice.
+
+DAY 1 FORMAT — AMERICAN SCRAMBLE DRIVE: Both Werner and Deon tee off every hole. They pick the best drive, then EACH plays their own ball from that spot. The better Stableford score counts for EU. Use the two-ball advantage tactically — the player with the better scoring rank attacks the pin; the other plays percentage as insurance.
+
+WERNER: Driver ~260m but inconsistent — misses both sides. Deon: HCI 8, very consistent, ~260m.
+MATCH CONTEXT: Adjust aggression based on match score and holes remaining. Down = attack. Up = manage. Do NOT state the score — let it shape the advice tone and targets only.
+
+CRITICAL: Always incorporate the specific layout warnings from the official course notes (e.g. don't miss left, carry the bunker, avoid the dam).
+
+FORMAT: Use **double asterisks** around critical warnings or key actions only (max 2 per field).
+
+STRICT CHARACTER LIMITS:
+- "tee": max 180 chars (omit key entirely if not Day 1 or no drive selection needed)
+- "strategy": max 320 chars
+
+Return JSON only, no markdown wrapper, no preamble.`;
+
+  const userMsg=`Hole ${h.num} — ${h.name}
+Zone: ${ZD.zm[h.num].toUpperCase()} (EU ${ZD.em[h.num]} vs US ${ZD.um[h.num]})
+Werner: ${h.werner} stroke(s)${isGIRTarget?' — GIR TARGET':''}
+Deon: ${h.deon} | Cilliers: ${h.cilliers} | Christo: ${h.christo}${h.christo===2?' (DOUBLES)':''}
+Scoring ranks — Werner #${R.w[h.num]}, Deon #${R.d[h.num]}, Cilliers #${R.c[h.num]}, Christo #${R.x[h.num]}
+Match: ${ms.label} with ${ms.holesRemaining} holes remaining (Day ${day} — ${DAY_FORMAT[day].split('(')[0].trim()})
+Official course notes: ${h.notes}`;
+
+  // Show loading state in boxes
+  const teeBox=document.getElementById('stratTeeBox');
+  const mainBox=document.getElementById('stratMainBox');
+  if(teeBox&&h.par>3&&day===1) teeBox.innerHTML=`<div class="ais-loading">Thinking</div>`;
+  if(mainBox) mainBox.innerHTML=`<div class="ais-loading">Thinking</div>`;
+
+  // Disable button
+  const btn=document.getElementById('aisBtnEl');
+  if(btn){btn.classList.add('loading');btn.textContent='⚡ AIS...';}
+
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:systemPrompt,
+        messages:[{role:'user',content:userMsg}]
+      })
+    });
+    const data=await resp.json();
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    const parsed=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    saveAIS(day,holeNum,{...parsed,ts:Date.now()});
+    applyStrategyContent(h,day,parsed);
+  }catch(e){
+    if(mainBox) mainBox.innerHTML='<span class="warn">Failed — check connection</span>';
+  }finally{
+    if(btn){btn.classList.remove('loading');btn.textContent='⚡ AIS';}
+  }
+}
+
+function parseBold(text){
+  // Convert **text** to styled span
+  return text.replace(/\*\*(.+?)\*\*/g,'<span class="ais-bold">$1</span>');
+}
+
+function applyStrategyContent(h,day,aisData){
+  const teeBox=document.getElementById('stratTeeBox');
+  const mainBox=document.getElementById('stratMainBox');
+  const isAIS=aisData!=null;
+  const strat=isAIS?null:getStaticStrategy(h,day);
+
+  if(teeBox){
+    if(h.par>3&&day===1){
+      const teeText=isAIS?parseBold(aisData.tee||''):(strat.tee||'');
+      teeBox.className='strategy-box'+(isAIS?' ais-active':'');
+      teeBox.innerHTML=teeText;
+      teeBox.style.display='block';
+    } else {
+      teeBox.style.display='none';
+    }
+  }
+  if(mainBox){
+    const mainText=isAIS?parseBold(aisData.strategy||''):(h.desc+(strat&&strat.approach?'<span class="divider"></span>'+strat.approach:''));
+    mainBox.className='strategy-box'+(isAIS?' ais-active':'');
+    mainBox.innerHTML=mainText;
+  }
+}
+
+function triggerAIS(holeNum,day){
+  clearAIS(day,holeNum);
+  generateAIS(holeNum,day);
+}
+
+// ── SCORE DATA ─────────────────────────────────────────────────────────────────
+function scoreKey(day,holeNum){return `d${day}_h${holeNum}`;}
+function loadScore(day,holeNum){try{const r=localStorage.getItem(scoreKey(day,holeNum));return r?JSON.parse(r):null;}catch(e){return null;}}
+function saveScore(day,holeNum,data){try{localStorage.setItem(scoreKey(day,holeNum),JSON.stringify(data));}catch(e){}}
+function defaultScore(h){return{fir:null,gir:null,putts:2,ud:'na',penalty:0,score:h.par+h.werner,result:null};}
+
+// ── SCORE CAPTURE UI ──────────────────────────────────────────────────────────
+function renderCapture(h,day){
+  const stored=loadScore(day,h.num);
+  const s=stored||defaultScore(h);
+  const isPar3=h.par===3;
+  const girAchieved=s.gir===true;
+  const scoreDefault=h.par+h.werner;
+  const scoreAtDefault=s.score===scoreDefault;
+  const match=loadMatch(day);
+  const holeResult=match[h.num-1];
+
+  const firYesCls=s.fir===true&&!isPar3?'active-yes':'';
+  const firNoCls=s.fir===false&&!isPar3?'active-no':'';
+  const firDis=isPar3?'disabled':'';
+  const girYesCls=s.gir===true?'active-yes':'';
+  const girNoCls=s.gir===false?'active-no':'';
+  const udYesCls=s.ud==='yes'&&!girAchieved?'active-yes':'';
+  const udNoCls=s.ud==='no'&&!girAchieved?'active-no':'';
+  const udNaCls=(s.ud==='na'||girAchieved)?'active-na':'';
+  const udDis=girAchieved?'disabled':'';
+  const hasSaved=stored!==null;
+
+  const euCls=holeResult==='eu'?'active-eu':'';
+  const drawCls=holeResult==='draw'?'active-draw':'';
+  const usCls=holeResult==='us'?'active-us':'';
+
+  return `
+  <div class="capture-grid">
+    <div class="capture-card">
+      <div class="capture-label">FIR${isPar3?' (N/A)':''}</div>
+      <div class="tog-row">
+        <button class="tog ${firYesCls} ${firDis}" onclick="captureToggle(${h.num},'fir',true)">YES</button>
+        <button class="tog ${firNoCls} ${firDis}" onclick="captureToggle(${h.num},'fir',false)">NO</button>
       </div>
-    </div>`;
+    </div>
+    <div class="capture-card">
+      <div class="capture-label">GIR</div>
+      <div class="tog-row">
+        <button class="tog ${girYesCls}" onclick="captureToggle(${h.num},'gir',true)">YES</button>
+        <button class="tog ${girNoCls}" onclick="captureToggle(${h.num},'gir',false)">NO</button>
+      </div>
+    </div>
+    <div class="capture-card">
+      <div class="capture-label">Putts</div>
+      <div class="counter-row">
+        <button class="cnt-btn" onclick="captureCounter(${h.num},'putts',-1)">−</button>
+        <div class="cnt-val">${s.putts}</div>
+        <button class="cnt-btn" onclick="captureCounter(${h.num},'putts',1)">+</button>
+      </div>
+    </div>
+    <div class="capture-card">
+      <div class="capture-label">Penalty</div>
+      <div class="counter-row">
+        <button class="cnt-btn" onclick="captureCounter(${h.num},'penalty',-1)">−</button>
+        <div class="cnt-val${s.penalty===0?' at-default':''}">${s.penalty}</div>
+        <button class="cnt-btn" onclick="captureCounter(${h.num},'penalty',1)">+</button>
+      </div>
+    </div>
+    <div class="capture-card">
+      <div class="capture-label">Up &amp; Down${girAchieved?' (GIR)':''}</div>
+      <div class="tog-row">
+        <button class="tog ${udYesCls} ${udDis}" onclick="captureUD(${h.num},'yes')">YES</button>
+        <button class="tog ${udNoCls} ${udDis}" onclick="captureUD(${h.num},'no')">NO</button>
+        <button class="tog ${udNaCls} ${udDis}" onclick="captureUD(${h.num},'na')">N/A</button>
+      </div>
+    </div>
+    <div class="capture-card">
+      <div class="capture-label">Score <span class="saved-dot ${hasSaved?'saved':''}" id="savedDot${h.num}"></span></div>
+      <div class="counter-row">
+        <button class="cnt-btn" onclick="captureCounter(${h.num},'score',-1)">−</button>
+        <div class="cnt-val${scoreAtDefault?' at-default':''}" id="scoreVal${h.num}">${s.score}</div>
+        <button class="cnt-btn" onclick="captureCounter(${h.num},'score',1)">+</button>
+      </div>
+    </div>
+    <div class="capture-card full">
+      <div class="capture-label">Hole Result</div>
+      <div class="tog-row">
+        <button class="tog ${euCls}" onclick="updateMatchResult(${currentDay},${h.num-1},'eu')">EU</button>
+        <button class="tog ${drawCls}" onclick="updateMatchResult(${currentDay},${h.num-1},'draw')">DRAW</button>
+        <button class="tog ${usCls}" onclick="updateMatchResult(${currentDay},${h.num-1},'us')">US</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function captureToggle(holeNum,field,val){
+  const h=HOLES[holeNum-1];
+  const s=loadScore(currentDay,holeNum)||defaultScore(h);
+  s[field]=s[field]===val?null:val;
+  if(field==='gir'&&s.gir===true)s.ud='na';
+  saveScore(currentDay,holeNum,s);
+  refreshCapture(h);
+}
+function captureUD(holeNum,val){
+  const h=HOLES[holeNum-1];
+  const s=loadScore(currentDay,holeNum)||defaultScore(h);
+  if(s.gir===true)return;
+  s.ud=s.ud===val?'na':val;
+  saveScore(currentDay,holeNum,s);
+  refreshCapture(h);
+}
+function captureCounter(holeNum,field,delta){
+  const h=HOLES[holeNum-1];
+  const s=loadScore(currentDay,holeNum)||defaultScore(h);
+  const mins={putts:0,penalty:0,score:1};
+  s[field]=Math.max(mins[field],(s[field]||0)+delta);
+  saveScore(currentDay,holeNum,s);
+  if(field==='score'){
+    const v=document.getElementById(`scoreVal${holeNum}`);
+    if(v){v.textContent=s.score;v.className='cnt-val'+(s.score===(h.par+h.werner)?' at-default':'');}
+    const dot=document.getElementById(`savedDot${holeNum}`);
+    if(dot)dot.classList.add('saved');
+  } else {
+    refreshCapture(h);
+  }
+}
+function refreshCapture(h){
+  const c=document.getElementById(`capture_${h.num}`);
+  if(c)c.innerHTML=renderCapture(h,currentDay);
+}
+
+// Pre-built Werner strokes per hole for stats calculations
+const WERNER_STROKES=Object.fromEntries(HOLES.map(h=>[h.num,h.werner]));
+
+// ── STATS ──────────────────────────────────────────────────────────────────────
+function calcStats(days){
+  const res={firMade:0,firTotal:0,girMade:0,girTotal:0,puttsTotal:0,puttsHoles:0,threeputts:0,udMade:0,udTotal:0,penaltyTotal:0,scoreByPar:{3:[],4:[],5:[]},birdies:0,pars:0,bogeys:0,doubles:0,triples:0,holesPlayed:0,matchWon:0,matchDraw:0,matchLost:0,matchPlayed:0,totalGross:0,totalNetPar:0};
+  days.forEach(day=>{
+    const matchArr=loadMatch(day);
+    matchArr.forEach(r=>{
+      if(!r)return;
+      res.matchPlayed++;
+      if(r==='eu')res.matchWon++;
+      else if(r==='draw')res.matchDraw++;
+      else if(r==='us')res.matchLost++;
+    });
+    HOLES.forEach(h=>{
+      const s=loadScore(day,h.num);
+      if(!s)return;
+      res.holesPlayed++;
+      if(h.par>3){res.firTotal++;if(s.fir===true)res.firMade++;}
+      res.girTotal++;if(s.gir===true)res.girMade++;
+      if(s.putts!=null){res.puttsTotal+=s.putts;res.puttsHoles++;if(s.putts>=3)res.threeputts++;}
+      if(s.ud==='yes'||s.ud==='no'){res.udTotal++;if(s.ud==='yes')res.udMade++;}
+      res.penaltyTotal+=s.penalty||0;
+      const gross=s.score,diff=gross-h.par;
+      res.totalGross+=gross;
+      res.totalNetPar+=(h.par+WERNER_STROKES[h.num]);
+      res.scoreByPar[h.par].push(gross);
+      if(diff<=-1)res.birdies++;
+      else if(diff===0)res.pars++;
+      else if(diff===1)res.bogeys++;
+      else if(diff===2)res.doubles++;
+      else if(diff>=3)res.triples++;
+    });
+  });
+  return res;
+}
+
+function renderStats(){
+  document.getElementById('holeBar').style.display='none';
+  document.getElementById('swipeHint').style.display='none';
+  const days=statsFilter===0?[1,2,3]:[statsFilter];
+  const st=calcStats(days);
+  const hasData=st.holesPlayed>0;
+  const firPct=st.firTotal?Math.round(st.firMade/st.firTotal*100):0;
+  const girPct=st.holesPlayed?Math.round(st.girMade/st.holesPlayed*100):0;
+  const udPct=st.udTotal?Math.round(st.udMade/st.udTotal*100):0;
+  const avgPutts=st.puttsHoles?(st.puttsTotal/st.puttsHoles).toFixed(1):'—';
+  function parAvgDiff(par){
+    const arr=st.scoreByPar[par];if(!arr.length)return{avg:'—',diff:'—',cls:'even'};
+    const a=arr.reduce((x,y)=>x+y,0)/arr.length,d=a-par;
+    return{avg:a.toFixed(1),diff:(d>=0?'+':'')+d.toFixed(1),cls:d>0?'over':d<0?'under':'even'};
+  }
+  const p3=parAvgDiff(3),p4=parAvgDiff(4),p5=parAvgDiff(5);
+  const distVals=[st.birdies,st.pars,st.bogeys,st.doubles,st.triples];
+  const maxDist=Math.max(...distVals,1);
+  function barH(v){return Math.max(2,Math.round(v/maxDist*52))+'px';}
 
   document.getElementById('holeCard').innerHTML=`
-
-    <div class="section-head">EU Scoring Opportunity</div>
-    <div class="opp-strip">
-      <div class="opp-card ${wLeader?'leader':''}">
-        <div class="opp-left"><div class="opp-rank">#${R.w[h.num]}</div></div>
-        <div class="opp-right">
-          <div class="opp-name">Werner ★${wLeader?' · Edge':''}</div>
-          <div class="opp-strokes s${h.werner}">${h.werner===2?'×2':h.werner===1?'×1':'×0'}</div>
-          <div class="opp-ng">NP <span>${wNP}</span> · NG <span>${wNG}</span></div>
-        </div>
-      </div>
-      <div class="opp-card ${dLeader?'leader':''}">
-        <div class="opp-left"><div class="opp-rank">#${R.d[h.num]}</div></div>
-        <div class="opp-right">
-          <div class="opp-name">Deon${dLeader?' · Edge':''}</div>
-          <div class="opp-strokes s${h.deon}">${h.deon===2?'×2':h.deon===1?'×1':'×0'}</div>
-          <div class="opp-ng">NP <span>${dNP}</span> · NG <span>${dNG}</span></div>
-        </div>
-      </div>
+  <div class="stats-page">
+    <div class="stats-filter">
+      <button class="sf-btn ${statsFilter===0?'active':''}" onclick="setStatsFilter(0)">ALL</button>
+      <button class="sf-btn ${statsFilter===1?'active':''}" onclick="setStatsFilter(1)">DAY 1</button>
+      <button class="sf-btn ${statsFilter===2?'active':''}" onclick="setStatsFilter(2)">DAY 2</button>
+      <button class="sf-btn ${statsFilter===3?'active':''}" onclick="setStatsFilter(3)">DAY 3</button>
     </div>
-
-    <div class="section-head">Hazards</div>
-    <div class="hazard-row">
-      ${h.tags.map(t=>`<span class="hazard-tag ${t.c}">${t.t}</span>`).join('')}
-    </div>
-
+    ${!hasData?`<div class="no-data">No scores captured yet.</div>`:`
+    ${st.matchPlayed>0?`
+    <div class="misc-row" style="margin-bottom:8px;">
+      <div class="misc-card" style="background:#080f1a;border-color:#1a4a7a;">
+        <div class="misc-label" style="color:#60a5fa">EU Won</div>
+        <div class="misc-val" style="color:#60a5fa">${st.matchWon}</div>
+      </div>
+      <div class="misc-card" style="background:#1a1405;border-color:#6b5a1a;">
+        <div class="misc-label" style="color:#f0c060">Draw</div>
+        <div class="misc-val" style="color:#f0c060">${st.matchDraw}</div>
+      </div>
+      <div class="misc-card" style="background:#1a0808;border-color:#7a2020;">
+        <div class="misc-label" style="color:#f87171">US Won</div>
+        <div class="misc-val" style="color:#f87171">${st.matchLost}</div>
+      </div>
+    </div>`:''}
     ${(()=>{
-      const strat=getDayStrategy(h,currentDay);
-      let html='';
-      // Hole description
-      html+=`<div class="section-head">Hole</div><div class="strategy-box">${h.desc}</div>`;
-      // Tee strategy (Day 1 par 4/5 only)
-      if(strat.tee){
-        html+=`<div class="section-head">Tee Strategy</div><div class="strategy-box">${strat.tee}</div>`;
-      }
-      // Approach / scoring strategy
-      html+=`<div class="section-head">Scoring — Day ${currentDay}</div><div class="strategy-box">${strat.approach}</div>`;
-      return html;
+      const netDiff=st.totalGross-st.totalNetPar;
+      const cls=netDiff<0?'under':netDiff>0?'over':'even';
+      const label=netDiff<0?`${Math.abs(netDiff)} UNDER HC`:netDiff>0?`${netDiff} OVER HC`:'SCRATCH';
+      const sub=`${st.totalGross} gross · ${st.totalNetPar} net par · ${st.holesPlayed} holes`;
+      return st.holesPlayed>0?`
+      <div class="net-score-card">
+        <div class="net-score-label">Net Score</div>
+        <div class="net-score-val ${cls}">${netDiff===0?'E':netDiff<0?netDiff:'+'+netDiff}</div>
+        <div class="net-score-sub">${label}</div>
+        <div class="net-score-sub" style="margin-top:2px">${sub}</div>
+      </div>`:'';
     })()}
-
-    <div class="section-head">All Players</div>
-    <div class="stroke-table">
-      <table>
-        <thead><tr><th>Player</th><th>HCI</th><th>Rank</th><th>Strokes</th><th>Net Par</th></tr></thead>
-        <tbody>
-          <tr class="is-werner">
-            <td class="eu-name">Werner ★</td><td>21</td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.w[h.num]}</td>
-            <td><span class="sb s${h.werner}">${h.werner}</span></td>
-            <td style="color:var(--accent)">${wNP}</td>
-          </tr>
-          <tr>
-            <td class="eu-name">Deon</td><td>8</td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.d[h.num]}</td>
-            <td><span class="sb s${h.deon}">${h.deon}</span></td>
-            <td style="color:var(--accent)">${dNP}</td>
-          </tr>
-          <tr>
-            <td class="us-name">Cilliers</td><td>16</td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.c[h.num]}</td>
-            <td><span class="sb s${h.cilliers}">${h.cilliers}</span></td>
-            <td style="color:var(--accent)">${h.par+h.cilliers}</td>
-          </tr>
-          <tr>
-            <td class="us-name">Christo</td><td>22</td>
-            <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)">#${R.x[h.num]}</td>
-            <td><span class="sb s${h.christo}">${h.christo}</span></td>
-            <td style="color:var(--accent)">${h.par+h.christo}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="gauge-row">
+      ${(()=>{
+        function gauge(pct,label,made,total,targetPct,redMax,amberMax){
+          const clamp=v=>Math.min(100,Math.max(0,v));
+          const pctC=clamp(pct),tgtC=clamp(targetPct);
+          // SVG arc — semicircle, 180 deg sweep
+          const r=40,cx=50,cy=50;
+          const circumference=Math.PI*r; // half circle arc length
+          function arcEnd(p){
+            const angle=-180+(p/100)*180;
+            const rad=angle*Math.PI/180;
+            return{x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)};
+          }
+          const dashTotal=circumference;
+          const dashFill=(pctC/100)*circumference;
+          const dashGap=circumference-dashFill;
+          const tgtAngle=-180+(tgtC/100)*180;
+          const tgtRad=tgtAngle*Math.PI/180;
+          const tgtX=cx+r*Math.cos(tgtRad),tgtY=cy+r*Math.sin(tgtRad);
+          const tgtXi=cx+(r-8)*Math.cos(tgtRad),tgtYi=cy+(r-8)*Math.sin(tgtRad);
+          const color=pct<=redMax?'#f87171':pct<=amberMax?'#f0c060':'#4dff8a';
+          return `<div class="gauge-card">
+            <div class="gauge-label">${label}</div>
+            <div style="display:flex;justify-content:center;">
+              <div class="gauge-wrap">
+                <svg viewBox="0 0 100 52" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#1e2e22" stroke-width="8" stroke-linecap="round"/>
+                  <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="${color}" stroke-width="8" stroke-linecap="round"
+                    stroke-dasharray="${dashFill} ${dashGap}" stroke-dashoffset="0"/>
+                  <line x1="${tgtXi}" y1="${tgtYi}" x2="${tgtX}" y2="${tgtY}" stroke="#f0b030" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="gauge-pct" style="color:${color}">${pct}%</div>
+            <div class="gauge-sub">${made}/${total} · tgt ${targetPct}%</div>
+          </div>`;
+        }
+        return gauge(firPct,'FIR',st.firMade,st.firTotal,36,25,45)+
+               gauge(girPct,'GIR',st.girMade,st.holesPlayed,15,10,20);
+      })()}
     </div>
-  `;
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Putts</div>
+        <div class="kpi-val" style="font-size:32px">${avgPutts}</div>
+        <div class="kpi-sub">3+ putts: ${st.threeputts}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Up &amp; Down</div>
+        <div class="kpi-val">${st.udTotal?udPct+'<span style="font-size:18px;color:var(--muted)">%</span>':'—'}</div>
+        <div class="kpi-sub">${st.udMade} / ${st.udTotal}</div>
+        ${st.udTotal?`<div class="kpi-bar-bg"><div class="kpi-bar-fill" style="width:${udPct}%"></div></div>`:''}
+      </div>
+    </div>
+    <div class="dist-block">
+      <div class="dist-head">Score distribution</div>
+      <div class="dist-bars">
+        <div class="dist-col"><div class="dist-count">${st.birdies}</div><div class="dist-bar bird" style="height:${barH(st.birdies)}"></div></div>
+        <div class="dist-col"><div class="dist-count">${st.pars}</div><div class="dist-bar par" style="height:${barH(st.pars)}"></div></div>
+        <div class="dist-col"><div class="dist-count">${st.bogeys}</div><div class="dist-bar bog" style="height:${barH(st.bogeys)}"></div></div>
+        <div class="dist-col"><div class="dist-count">${st.doubles}</div><div class="dist-bar dbl" style="height:${barH(st.doubles)}"></div></div>
+        <div class="dist-col"><div class="dist-count">${st.triples}</div><div class="dist-bar trip" style="height:${barH(st.triples)}"></div></div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <div class="dist-col"><div class="dist-label" style="color:#4dff8a">Birdie−</div></div>
+        <div class="dist-col"><div class="dist-label">Par</div></div>
+        <div class="dist-col"><div class="dist-label" style="color:#f0b030">Bogey</div></div>
+        <div class="dist-col"><div class="dist-label" style="color:#ff6060">Double</div></div>
+        <div class="dist-col"><div class="dist-label" style="color:#c03030">Triple+</div></div>
+      </div>
+    </div>
+    <div class="par-row">
+      <div class="par-card"><div class="par-label">Avg Par 3</div><div class="par-val">${p3.avg}</div><div class="par-diff ${p3.cls}">${p3.diff}</div></div>
+      <div class="par-card"><div class="par-label">Avg Par 4</div><div class="par-val">${p4.avg}</div><div class="par-diff ${p4.cls}">${p4.diff}</div></div>
+      <div class="par-card"><div class="par-label">Avg Par 5</div><div class="par-val">${p5.avg}</div><div class="par-diff ${p5.cls}">${p5.diff}</div></div>
+    </div>
+    <div class="misc-row">
+      <div class="misc-card"><div class="misc-label">Penalties</div><div class="misc-val" style="color:${st.penaltyTotal>0?'#ff6060':'var(--muted)'}">${st.penaltyTotal}</div></div>
+      <div class="misc-card"><div class="misc-label">3-Putts</div><div class="misc-val" style="color:${st.threeputts>0?'#f0b030':'var(--muted)'}">${st.threeputts}</div></div>
+      <div class="misc-card"><div class="misc-label">Holes</div><div class="misc-val" style="color:var(--muted)">${st.holesPlayed}</div></div>
+    </div>
+    `}
+  </div>`;
+}
+
+// ── TIPS ───────────────────────────────────────────────────────────────────────
+
+const TIPS={
+  driver:{
+    label:'Driver',
+    stages:{
+      assessment:{
+        quick:['Read dangers — OOB, water, trees','Note wind direction and strength','<strong>Choose target line and commit</strong> — no second-guessing after this'],
+        full:['Identify all danger zones left and right — OOB, water, trees, fairway bunkers','Read the wind direction and estimate its effect on ball flight','<strong>Choose your target line and commit to it fully</strong> — aim at a specific object, not a general area','Once committed, take all decision-making off the table and move into execution mode']
+      },
+      rehearsal:{
+        quick:['Free swing to get loose — <strong>feel the tempo</strong>','Feel <strong>hands dropping</strong> into the slot','Feel the <strong>release</strong> — sweep upward, sternum stays back'],
+        full:['Take a free practice swing — the purpose is to get loose, not to be mechanical','Focus on <strong>tempo first</strong> — slow and wide on the way back','Feel the hands <strong>dropping into the slot</strong> at the start of the downswing','Feel the <strong>release through impact</strong> — the club sweeping upward off the tee','<strong>Sternum stays behind the ball</strong> through impact — this is what allows you to hit up']
+      },
+      setup:{
+        quick:['Ball forward — left heel/toe','Wide stance, tee high','<strong>Right side lower</strong> (K-posture tilt)','50/50 weight, <strong>light grip</strong>'],
+        full:['<strong>Ball position: forward</strong> — opposite left heel or left toe. Further forward than feels natural.','<strong>Tee height: high</strong> — promotes upward attack angle. Never sky it if ball is far enough forward.','<strong>Wide stance</strong> — slightly wider than shoulder width. Legs are a power source.','<strong>K-posture tilt</strong> — right side lower than left. This makes the club bottom out early and collect the ball on the way up.','<strong>Weight: 50/50</strong> — unlike irons, do not favour the lead side','Lift club slightly off the ground at address. <strong>Light grip pressure</strong> throughout.']
+      },
+      swing:{
+        quick:['<strong>Wide figure-8 takeaway</strong> — slow and wide','Easy transition at the top','<strong>Drop hands</strong> into slot','<strong>Sternum behind ball</strong> — release and sweep through'],
+        full:['<strong>Wide figure-8 takeaway</strong> — feel width in the backswing, no narrow or steep path','Easy transition — let the top of the backswing happen, no rushing down','<strong>Drop the hands</strong> into the slot to start the downswing — this is the key move','Keep lag, then <strong>release the club fully through impact</strong>','<strong>Sternum stays behind the ball at impact</strong> — resist the urge to lunge forward','The ball should be swept off the tee with an upward attack angle — trust the setup to deliver this']
+      }
+    }
+  },
+  irons:{
+    label:'Irons',
+    stages:{
+      assessment:{
+        quick:['Distance, lie, hazards, pin position','<strong>Choose club and commit</strong>','Note wind — adjust club if needed'],
+        full:['Check the distance to the pin and any front/back of green markers','Read the lie — is the ball sitting well? On a slope? In a divot?','Identify hazards between you and the green and beyond the green','Read the pin position — front, middle, back — and choose your target','<strong>Select your club and commit</strong> — factor in wind, elevation change, and adrenaline','Once club is chosen, take decision-making off the table']
+      },
+      rehearsal:{
+        quick:['Feel <strong>hands dropping</strong> into the slot','Feel <strong>sternum shifting</strong> forward over left knee','Feel <strong>chest rotating</strong> through — weight transfers to lead side'],
+        full:['Take a practice swing with purpose — feel the specific movements, not just the motion','Feel the <strong>hands dropping</strong> into the slot at transition — same as driver','Feel the <strong>sternum shifting forward over the left knee</strong> as you come through — this is the weight transfer','Feel the <strong>chest rotating</strong> all the way through impact — this prevents fat/thin contact','The rehearsal swing should feel like a controlled rotation, not a lunge or a slide','<strong>Key difference from driver:</strong> sternum moves forward (weight transfer) rather than staying back']
+      },
+      setup:{
+        quick:['<strong>Square finger grip</strong>','Ball slightly ahead of centre','<strong>60% weight lead side</strong>','Neutral tilt, <strong>light grip</strong>'],
+        full:['<strong>Square finger grip</strong> — not palm grip. Fingers give feel and release.','<strong>Ball position:</strong> slightly ahead of centre, roughly one clubhead inside lead heel. Further back than driver.','<strong>Weight: 60% on lead side</strong> — this ensures the low point of the swing is past the ball. Critical for ball-then-turf contact.','<strong>Neutral tilt</strong> — right hand is naturally lower, that is fine, but do not exaggerate K-posture like you would for driver. That promotes hitting up which is the opposite of what you want.','Stance narrower than driver. <strong>Light grip pressure</strong> — barely holding it.']
+      },
+      swing:{
+        quick:['<strong>Wide figure-8 takeaway</strong> — shorter backswing','<strong>Drop hands</strong> into slot','<strong>Sternum shifts and rotates</strong> over left knee','<strong>Release</strong> onto ball — chest all the way through'],
+        full:['<strong>Wide figure-8 takeaway</strong> — feel width but keep backswing shorter than driver','Steady tempo — no rush at the top of the backswing','<strong>Drop the hands</strong> to initiate the downswing — same key move as driver','<strong>Shift the sternum forward over the left knee</strong> as the downswing begins — this is the weight transfer that prevents fat shots','<strong>Rotate the chest all the way through impact</strong> — do not stop turning. Stopping is what causes thin/fat.','<strong>Release the club onto the ball</strong> — you should get a divot starting after the ball, not before','The ball flight is controlled and lower than driver — this is correct. Downward attack angle = distance control and consistency.']
+      }
+    }
+  },
+  pitch:{
+    label:'Pitch',
+    stages:{
+      assessment:{
+        quick:['Distance to pin — choose <strong>A1 / A2 / A3</strong>','Read lie and wind','Choose landing zone'],
+        full:['Pace or estimate distance to the pin','Read the lie — sitting up or tight? This affects trajectory choice','Note the wind — into/downwind changes club and A-setup','<strong>Choose landing zone</strong> — where do you want the ball to land, not where the pin is','<strong>Select A-setup:</strong> A1 (short/back pin) · A2 (standard) · A3 (front pin/stop quickly)','A1 = 1 clubhead between feet, grip low → 7:30 swing, lower flight, more run','A2 = 2 clubheads, mid grip → 9:00 swing, mid height, standard pitch','A3 = 3 clubheads, full grip, further from ball → 10:30 swing, higher, softer landing']
+      },
+      rehearsal:{
+        quick:['Feel <strong>chest rotation</strong> — roots in feet, rotate around legs','Feel <strong>gravity</strong> — let the club fall, do not force distance','One swing to gauge <strong>distance feel</strong> for chosen A-setup'],
+        full:['Take one practice swing with the chosen A-setup to feel the distance','This is <strong>rotation not transfer</strong> — lower body stays quiet, chest is the engine','Feel as if <strong>roots are growing out of your feet</strong> — no lateral sway, rotate around your legs','Feel <strong>gravity doing the work</strong> — the club falls with its own weight, you do not force it','The A-setup creates the swing length automatically — trust it. Do not try to hit it harder or softer than the setup dictates.','Feel the <strong>12 o\'clock backswing cap</strong> for standard pitch — no more than that']
+      },
+      setup:{
+        quick:['Match stance width to A-setup (1/2/3 clubheads)','Grip position matches A-setup','<strong>Weight on lead side</strong>, light grip'],
+        full:['<strong>A1:</strong> 1 clubhead between heels, grip down low, weight forward → produces ~7:30 arm swing naturally','<strong>A2:</strong> 2 clubheads between heels, mid grip, weight forward → produces ~9:00 arm swing','<strong>A3:</strong> 3 clubheads, full grip, stand further from ball → produces ~10:30 arm swing','<strong>Weight on lead side for all setups</strong> — this is pitching not driving. Rotation around front side.','Light grip on all pitches — feel is everything at these distances','The setup creates the distance — once set, you focus only on chest speed and trajectory']
+      },
+      swing:{
+        quick:['<strong>Chest rotates</strong> — lower body quiet','<strong>12 o\'clock</strong> backswing — no more','<strong>Gravity</strong> controls distance — do not force','<strong>Brush the bounce</strong> just after the ball'],
+        full:['<strong>Chest is the engine</strong> — rotate around your front side, lower body is largely passive','<strong>12 o\'clock backswing</strong> for A2/A3 — the A-setup limits your A1 swing automatically','Let <strong>gravity control the distance</strong> — the club falls, you do not hit at it. This is the tempo secret.','<strong>Brush the bounce</strong> just after the ball — the sole of the club should skim the turf, not dig','Keep chest rotating through to the finish — never quit at impact','The trajectory you visualised in assessment should match the A-setup you chose — trust the process']
+      }
+    }
+  },
+  chip:{
+    label:'Chip',
+    stages:{
+      foundations:{
+        quick:null,
+        full:[
+          '<strong>Short game is the opposite of long game.</strong> Long game = power and weight transfer. Short game = soft rotation around the front side. Lower body stays quiet. Chest is the engine. The most common setup fault is a shoulder tilt borrowed from the driver — it causes heavy contact every time.',
+          '<strong>The bounce is the whole system.</strong> The three releases are really about which section of the sole contacts the turf. Front section (R1) = nipping the ball. Middle section (R2) = sliding softly under. Back section (R3) = shallow splash. The lie tells you which section you can use.',
+          '<strong>Pivot line:</strong> Lead shoulder over hip over knee over middle of foot. Weight on the lead side. This allows a downward or level strike and prevents the most common fault — hitting behind the ball.',
+          '<strong>Wrist position dictates the shot:</strong> The lower the hands at address, the more the wrists want to set. R1 = hands high (flat wrist, limits hinge). R2 = hands lower (slight cup, natural set). R3 = hands very low between knees (maximum cup, maximum set).',
+          '<strong>Arms:</strong> Let them hang naturally with a slight fold. Do not reach or crowd the ball. Natural hang gives automatic feel and spin.',
+          '<strong>Formula: (Technique + Golfing IQ) × Practice = Short game ability.</strong> Technique gets you so far. Thinking gets you close. An imperfect swing with the right release, reading the lie correctly, is great golf.'
+        ]
+      },
+      assessment:{
+        quick:[
+          '<strong>Lie read</strong> — 🔴 Hard pan (R1 only) · 🟡 Tight (R1/R2) · 🟢 Sits up (any)',
+          '<strong>Situation</strong> — How much green? Slopes? Match/stroke play?',
+          '<strong>Choose release + club</strong> — R1 run out · R2 soft land · R3 lob',
+          '<strong>Visualise landing spot</strong> — glare at spot, glance at hole',
+          '<strong>Finish check plan</strong> — lead hip (R1) · belt buckle (R2) · trail hip (R3)'
+        ],
+        full:[
+          '<strong>1. Read the lie</strong> — this decides everything. 🔴 Hard pan/divot = R1 only. 🟡 Tight lie = R1 or R2. 🟢 Sits up nicely = any release available. Any doubt → default to R1.',
+          '<strong>2. Read the situation</strong> — How much green? Upslope or downslope? Stroke play (take your medicine) or match play (go for it)? Aim to leave an uphill putt for your next shot.',
+          '<strong>3. Pick your release and club</strong> — R1 (chip and run): plenty of green, firm lies, any club — less loft = more run, more loft = more check. R2 (soft landing): must carry fringe, quick greens, 54–58° (avoid 60° — speed becomes unpredictable). R3 (lob): little or no green, needs grass under the ball, 60° only.',
+          '<strong>4. Visualise the landing spot</strong> — glare at the landing spot. Glance at the hole. Not the other way round. Commit to the landing spot.',
+          '<strong>5. Plan your finish check</strong> — know in advance where your grip should point: lead hip = R1, belt buckle = R2, trail hip = R3. You will self-coach after the shot.'
+        ]
+      },
+      rehearsal:{
+        quick:['Feel the <strong>specific release</strong> you have chosen','Feel the <strong>bounce interaction</strong> — sole skimming the turf','Feel the <strong>finish position</strong> — know where grip should land'],
+        full:['Take one practice swing feeling the <strong>specific release chosen</strong> — not a generic swing','<strong>R1 rehearsal:</strong> feel the low driving hands, chest rotating, grip finishing at lead hip','<strong>R2 rehearsal:</strong> feel the club falling with gravity, wrist setting naturally, toe up in backswing, grip to belt buckle','<strong>R3 rehearsal:</strong> feel the wide swing, cut across, club into the holster at trail hip','<strong>Feel the bounce</strong> — the sole should skim the turf in the rehearsal. Feel which section of the sole contacts the ground.','<strong>Grip pressure</strong> — barely holding it. This is the single most important rehearsal thought. Loosen until you can feel the clubhead weight.']
+      },
+      setup:{
+        quick:['<strong>R1:</strong> ball back · hands high/flat · slight shaft lean · narrow','<strong>R2:</strong> ball forward · slight cup · neutral shaft · slightly wider','<strong>R3:</strong> ball well forward · max cup/hands low · wide stance · front foot 45°'],
+        full:[
+          '<strong>R1 — Chip and run:</strong> Narrow stance (1 ball between heels). Ball back of centre. Hands high (flat wrist, limits hinge). Slight forward shaft lean. Weight lead side. Front bounce section contacts ground.',
+          '<strong>R2 — Soft landing:</strong> Slightly wider stance. Ball forward, front foot slightly flared. Hands lower (slight cup wrist, allows natural set). Neutral shaft. Weight lead side. Middle of sole contacts ground.',
+          '<strong>R3 — Lob shot:</strong> Wide stance (driver width). Front foot 45° open. Ball well forward. Hands very low between knees (maximum cup). Neutral shaft, upper body slightly back. Trailing/back section of sole contacts ground. <strong>Only play from grass — never hard pan.</strong>',
+          '<strong>Club choice for R1:</strong> Use club choice to control run-out. A SW will check on a quick green and struggle to reach a back pin — drop to a 9 or 8 iron. Same release, same swing, more run.',
+          '<strong>Club choice for R2:</strong> Preferred clubs are 54°, 56° or 58°. Seve never used more than 55°. You do not need as much loft as you think — learn to release properly instead.'
+        ]
+      },
+      swing:{
+        quick:['<strong>Brush the bounce</strong> — sole skims the turf','<strong>Chest rotates</strong> through — never quit','<strong>Commit</strong> to the release','<strong>Hold and check finish</strong> — self-coach from what you see'],
+        full:[
+          '<strong>R1 swing:</strong> Rotation around front side — not a drive or a flip. Keep hands low and driving through impact. Grip finishes at lead hip. Chest, hands and clubhead all connected through finish. Works from any lie including divots and hard pan.',
+          '<strong>R2 swing:</strong> The club falls with its own weight — do not force it. Toe up in the backswing — if the wrist arches down it takes loft and bounce off the club. Keep chest moving as the club falls, do not scoop with wrists alone. Grip to belt buckle.',
+          '<strong>R3 swing:</strong> Position-zero emergency shot only. Longer, more wristy swing. Wide stance gives the stable base. Cut across the ball, release into the holster (trail hip/front pocket). Ball stops from vertical land angle, not spin. In stroke play, weigh up carefully. In match play, more justified when you need a miracle.',
+          '<strong>All releases — non-negotiables:</strong> Grip pressure barely holding it. Chest rotating through impact — never quit. Any doubt about lie → default to R1.',
+          '<strong>Hold the finish and check it:</strong> Lead hip = R1. Belt buckle = R2. Trail hip = R3. If it is wrong you know exactly what to fix — no coach needed.'
+        ]
+      },
+      drills:{
+        quick:null,
+        full:[
+          '<strong>Left hand only (backswing plane):</strong> Hold club in lead hand only and push it back. You will automatically find the correct shaft plane — almost impossible to roll under with one hand supporting the weight. Best drill for fixing an under-plane backswing.',
+          '<strong>Lead leg only (stop swaying):</strong> Go up on your trail toe, all weight on the lead leg, and hit shots. If you are swaying you will fall over. Guarantees you stay centred and teaches rotation around a fixed point.',
+          '<strong>Thumbs off (grip pressure / R2):</strong> Take both thumbs completely off the grip — fingers only. You will immediately feel the clubhead weight and how it wants to swing on its own momentum. Essential for learning the soft landing shot.',
+          '<strong>Hold the finish (self-coaching):</strong> After every shot, freeze and check where the grip is pointing. Lead hip = R1. Belt buckle = R2. Trail hip = R3. If it is wrong you know exactly what to fix without needing a coach.',
+          '<strong>Grip at the ferrule (rotation feel):</strong> Grip down to the black ferrule (bottom of grip), rest it against the lead hip, take it back, and rotate to a finish. Trains the feeling of rotation driving the release rather than hands driving alone.',
+          '<strong>Sand on the face (bunker loft):</strong> Put sand on the club face before a bunker practice shot. If you maintain loft through impact the sand throws over your back shoulder. Instantly reveals if you are de-lofting at impact — the most common bunker fault.'
+        ]
+      }
+    }
+  },
+  bunker:{
+    label:'Bunker',
+    stages:{
+      assessment:{
+        quick:['<strong>Feel the sand</strong> with feet as you walk in','<strong>Compact</strong> → R1 · <strong>Standard</strong> → R2 · <strong>Deep/fluffy</strong> → R3','Read slope — downhill lean forward · uphill ball forward'],
+        full:['<strong>Feel the sand texture with your feet</strong> as you walk into the bunker — look at depth and consistency before you set up. Switch your eyes on — there is no such thing as a bad lie if you read it correctly and adapt.','<strong>Compact/firm sand → R1:</strong> Steeper attack, more hinge, squeeze not splash. Lower trajectory but it gets out. Use your most lofted club as shaft lean removes loft.','<strong>Standard sand → R2:</strong> Default bunker shot. Square stance, slide bounce under ball, chest moves all the way through. Build your confidence here first.','<strong>Deep/fluffy sand → R3:</strong> Full release, swing harder than feels natural. The extra sand resistance requires the club to really skip through. Ball sitting up in deep sand is actually a green light.','<strong>Read the slope:</strong> Downhill = lean forward, R1, hinge early. Uphill = ball forward, shallower attack, R2.','<strong>Do not stand open and swipe across the ball.</strong> Modern sand wedges are designed to work square to the target. Align square, work the sand toward the target — distance control becomes far more consistent.']
+      },
+      rehearsal:{
+        quick:['Feel the <strong>release chosen</strong> for the sand type','Feel the <strong>bounce skimming</strong> under the sand — not digging','Feel <strong>chest moving</strong> all the way through'],
+        full:['Take a practice swing feeling the release you have chosen for the sand type','<strong>R1 rehearsal:</strong> feel the steeper, more hinged attack — squeezing through the sand, not splashing','<strong>R2 rehearsal:</strong> feel the bounce sliding under, chest moving all the way through to the holster','<strong>R3 rehearsal:</strong> feel the full wide release, harder than comfortable, club deep through the sand','<strong>Feel the bounce skimming</strong> — the sole should skim under the ball, never dig. Digging kills speed and distance control.','<strong>Grip pressure</strong> — barely holding it. Sand resistance will tighten your grip naturally — consciously fight this.']
+      },
+      setup:{
+        quick:['Align <strong>square to target</strong> — not open','<strong>Dig feet in</strong> for stability, choke down to compensate','Match setup to release chosen (R1/R2/R3)'],
+        full:['<strong>Align square to the target</strong> — not open. Modern bounce works best square.','<strong>Dig your feet into the sand</strong> for stability. Choke down on the grip slightly to compensate for the lower stance depth.','<strong>R1 setup in bunker:</strong> More shaft lean, ball slightly back. Promotes steeper attack. Use most lofted club as shaft lean removes loft.','<strong>R2 setup in bunker:</strong> Standard setup, neutral shaft, ball forward. This is your default.','<strong>R3 setup in bunker:</strong> Wide stance, ball well forward, hands low, front foot open. Full swing required.','<strong>Light grip pressure</strong> — counterintuitive in sand but essential for feel and distance control.']
+      },
+      swing:{
+        quick:['<strong>Work the sand toward the target</strong> — not across it','<strong>Chest moving all the way</strong> through to holster','<strong>Never quit</strong> at impact — commit through the sand'],
+        full:['<strong>R1 bunker swing:</strong> Steeper angle of attack, early hinge, squeeze the sand from under the ball. Do not splash. Shorter finish. Ball comes out lower but it gets out.','<strong>R2 bunker swing:</strong> Slide the bounce under the ball. Keep chest moving all the way through to the holster. This is your default — build confidence here first.','<strong>R3 bunker swing:</strong> Full release, swing harder than feels right. The extra sand resistance requires the club to really skip through. Ball sitting up in deep sand = green light.','<strong>Work the sand toward the target</strong> — not across it. Distance control becomes far more consistent.','<strong>Never quit at impact</strong> — the most common bunker fault is deceleration. Commit through the sand every time.']
+      },
+      drills:{
+        quick:null,
+        full:[
+          '<strong>Sand on the face (bunker loft):</strong> Put sand on the club face before practice. If you maintain loft through impact the sand throws over your back shoulder. Instantly reveals if you are de-lofting at impact — the most common bunker fault.',
+          '<strong>Lead leg only (stay centred):</strong> Go up on trail toe, all weight on lead leg, hit bunker shots. Stops the sway and lateral movement that causes fat contact in sand.',
+          '<strong>Hold the finish (self-coaching):</strong> After every bunker shot freeze and check the finish. Chest facing target, grip in the holster. If you quit at impact the finish will tell you immediately.',
+          '<strong>Eyes closed (feel the bounce):</strong> Set up for an R2 bunker shot and hit it with eyes closed after takeaway. Forces you to feel the bounce sliding under rather than watching and steering. Develops trust in the release.'
+        ]
+      }
+    }
+  },
+  putt:{
+    label:'Putt',
+    stages:{
+      assessment:{
+        quick:['<strong>Mark ball</strong>','Pace to hole — <strong>read slopes</strong> on the way','Lag: aim for <strong>bin lid distance</strong>, safest line','Short: commit to a line'],
+        full:['<strong>Mark the ball</strong>','Pace the distance to the hole — read the slope and grain on the way down and back','For <strong>lag putts</strong>: focus primarily on weight, not line. Identify the safest line that leaves you within bin lid distance. A bad lag is a three-putt.','For <strong>short putts</strong>: commit fully to a line. Pick the entry point of the hole and do not change your mind.','Read any significant slope breaks — identify the high point of the break and aim for it','Note the grain direction if relevant — into grain = more weight, down grain = less']
+      },
+      rehearsal:{
+        quick:['Stand <strong>behind ball</strong>, eyes on hole','Feel the <strong>weight/distance</strong> — not mechanics','One practice stroke <strong>looking at the hole</strong>'],
+        full:['Stand <strong>behind the ball</strong> with eyes on the hole — get a feel for the distance and weight required','Take <strong>one practice stroke looking at the hole</strong> — not at the ball. Feel the pendulum length that matches the distance.','This rehearsal is about <strong>feel and weight, not mechanics</strong> — do not think about stroke path, face angle or any technical thought here','Pick your <strong>starting line</strong> and find a specific object close to the ball to aim at — a blade of grass, a discolouration on the green','<strong>Commit</strong> — once you have your line and weight feel, do not second-guess']
+      },
+      setup:{
+        quick:['Aim at close <strong>target object</strong> on starting line','Comfortable stance, <strong>eyes over the ball</strong>','<strong>Light grip</strong> throughout'],
+        full:['Align the ball marker/line to your chosen starting line','Find a <strong>specific target object close to the ball</strong> — aim at that, not the hole','Set up with <strong>eyes directly over the ball</strong> or just inside the line — this gives accurate line perception','Comfortable stance width — do not copy anyone else\'s putting stance. Find what keeps you still.','<strong>Light grip pressure throughout</strong> — tension in the hands kills feel and produces a jerky stroke']
+      },
+      swing:{
+        quick:['Focus on <strong>close target object</strong> and feel','<strong>Serve the ball</strong> to the hole — confident, with feel','Wait for <strong>grass under the ball</strong> before looking up'],
+        full:['<strong>Focus on your close target object</strong> — stroke toward it. Let the hole look after itself.','<strong>Serve the ball to the hole</strong> — confident, committed, but with feel. Never mechanical or robotic.','Stroke is a <strong>pendulum</strong> — equal length back and through for most putts. Do not decelerate into impact.','<strong>Wait until you see grass under the ball before looking up</strong> — looking up early pulls the putter off line at the critical moment','For lag putts: <strong>bigger swing, same tempo</strong> — do not hit it harder, swing it longer','After the putt: note where it finished relative to the hole. Build your green-reading database mentally.']
+      }
+    }
+  }
+};
+
+function renderStage(stageData, mode){
+  const items = mode==='quick' ? stageData.quick : stageData.full;
+  if(!items) return '';
+  return items.map(item=>`<div class="full-item">${item}</div>`).join('');
+}
+
+function renderTips(){
+  showingTips=true;
+  showingStats=false;
+  document.getElementById('holeBar').style.display='none';
+  document.getElementById('swipeHint').style.display='none';
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.day-btn')[4].classList.add('active');
+
+  const tip=TIPS[tipsTab];
+
+  // Core stages always shown
+  const coreStages=[
+    {key:'assessment', label:'Assessment'},
+    {key:'rehearsal',  label:'Rehearsal'},
+    {key:'setup',      label:'Setup'},
+    {key:'swing',      label:'Swing'}
+  ];
+  // Extra stages — full mode only
+  const extraStages=[
+    {key:'foundations', label:'Foundations'},
+    {key:'drills',      label:'Drills'}
+  ];
+
+  // Traffic light block for chip/bunker assessment
+  const trafficLight=`
+    <div class="traffic-row" style="margin-top:10px">
+      <div class="tl-chip red"><div class="tl-icon">🔴</div><div class="tl-label">Hard pan<br>R1 only</div></div>
+      <div class="tl-chip amber"><div class="tl-icon">🟡</div><div class="tl-label">Tight lie<br>R1 or R2</div></div>
+      <div class="tl-chip green"><div class="tl-icon">🟢</div><div class="tl-label">Sits up<br>Any release</div></div>
+    </div>`;
+
+  let content='';
+
+  // In full mode, show foundations first if available
+  if(tipsMode==='full'){
+    extraStages.filter(s=>s.key==='foundations').forEach(s=>{
+      const stageData=tip.stages[s.key];
+      if(!stageData||!stageData.full) return;
+      content+=`<div class="full-section">
+        <div class="full-section-head">${s.label}</div>
+        ${renderStage(stageData, 'full')}
+      </div>`;
+    });
+  }
+
+  // Core stages
+  coreStages.forEach(s=>{
+    const stageData=tip.stages[s.key];
+    if(!stageData) return;
+    const rendered=renderStage(stageData, tipsMode);
+    if(!rendered) return;
+    content+=`<div class="full-section">
+      <div class="full-section-head">${s.label}</div>
+      ${rendered}
+      ${(s.key==='assessment'&&(tipsTab==='chip'||tipsTab==='bunker'))?trafficLight:''}
+    </div>`;
+  });
+
+  // In full mode, show drills last if available
+  if(tipsMode==='full'){
+    extraStages.filter(s=>s.key==='drills').forEach(s=>{
+      const stageData=tip.stages[s.key];
+      if(!stageData||!stageData.full) return;
+      content+=`<div class="full-section">
+        <div class="full-section-head">${s.label}</div>
+        ${renderStage(stageData, 'full')}
+      </div>`;
+    });
+  }
+
+  document.getElementById('holeCard').innerHTML=`
+  <div class="tips-page">
+    <div class="tips-toggle">
+      <button class="tt-btn ${tipsMode==='quick'?'active':''}" onclick="setTipsMode('quick')">⚡ Quick</button>
+      <button class="tt-btn ${tipsMode==='full'?'active':''}" onclick="setTipsMode('full')">📖 Full</button>
+    </div>
+    <div class="tips-tabs">
+      ${Object.entries(TIPS).map(([k,v])=>`<button class="tip-tab ${tipsTab===k?'active':''}" onclick="setTipsTab('${k}')">${v.label}</button>`).join('')}
+    </div>
+    <div class="tip-card">${content}</div>
+  </div>`;
 
   document.getElementById('mainScroll').scrollTop=0;
 }
 
+function setTipsMode(m){tipsMode=m;renderTips();}
+function setTipsTab(t){tipsTab=t;renderTips();}
+
+function showTips(){
+  showingTips=true;
+  renderTips();
+}
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
+let currentHole=0,currentDay=1,showingStats=false,showingTips=false,statsFilter=0,tipsMode='quick',tipsTab='driver';
+let wakeLock=null,touchStartX=0,deferredPrompt=null;
+
+// ── MAIN RENDER ────────────────────────────────────────────────────────────────
+function renderHole(){
+  showingStats=false;
+  showingTips=false;
+  document.getElementById('holeBar').style.display='flex';
+  document.getElementById('swipeHint').style.display='block';
+  const h=HOLES[currentHole];
+  const zone=ZD.zm[h.num];
+  const wNP=h.par+h.werner,dNP=h.par+h.deon;
+  const isGIRTarget=GIR_TARGET.has(h.num);
+  const strat=getStaticStrategy(h,currentDay);
+  const aisData=loadAIS(currentDay,h.num);
+
+  // Target Score calculation
+  function getTS(rank, par, strokes){
+    if(rank<=3)  return par+strokes-2; // target net eagle = 4 pts
+    if(rank<=12) return par+strokes-1; // target net birdie = 3 pts
+    return par+strokes;                // target net par = 2 pts
+  }
+  const wTS=getTS(R.w[h.num],h.par,h.werner);
+  const dTS=getTS(R.d[h.num],h.par,h.deon);
+
+  document.getElementById('holeNum').textContent=h.num;
+  document.getElementById('holeBar').className=`hole-bar ${zone}`;
+  document.getElementById('holeChips').innerHTML=
+    `<div class="h-chip"><div class="v">P${h.par}</div></div>`+
+    `<div class="h-chip"><div class="v">${h.dist}M</div></div>`+
+    `<div class="h-chip"><div class="v">S${h.si}</div></div>`;
+  renderMatchChip();
+
+  document.getElementById('holeCard').innerHTML=`<div class="card">
+
+    <div class="section-head">Players</div>
+    <div class="stroke-table">
+      <table>
+        <thead><tr><th>Player</th><th style="text-align:center">Rank</th><th style="text-align:center">Str</th><th style="text-align:center">NP</th><th style="text-align:center">TS</th></tr></thead>
+        <tbody>
+          ${(()=>{
+            const euEdge=R.w[h.num]<=R.d[h.num]?'werner':'deon';
+            const usEdge=R.c[h.num]<=R.x[h.num]?'cilliers':'christo';
+            const players=[
+              {key:'werner', name:'Werner',hci:21,rank:R.w[h.num],strokes:h.werner,np:wNP,ts:wTS,team:'eu'},
+              {key:'deon',   name:'Deon',  hci:8, rank:R.d[h.num],strokes:h.deon,  np:dNP,ts:dTS,team:'eu'},
+              {key:'cilliers',name:'Cilliers',hci:16,rank:R.c[h.num],strokes:h.cilliers,np:h.par+h.cilliers,ts:null,team:'us'},
+              {key:'christo', name:'Christo', hci:22,rank:R.x[h.num],strokes:h.christo, np:h.par+h.christo, ts:null,team:'us'},
+            ].sort((a,b)=>a.rank-b.rank);
+            return players.map(p=>{
+              const isWerner=p.key==='werner';
+              const hasEdge=(p.key===euEdge&&p.team==='eu')||(p.key===usEdge&&p.team==='us');
+              const girMark=isWerner&&isGIRTarget?' ⛳':'';
+              const edgeMark=hasEdge?' ★':'';
+              const rowCls=isWerner?'row-eu is-werner':'row-'+p.team;
+              const nameCls=p.team==='eu'?'eu-name':'us-name';
+              const tsCell=p.ts!==null?`<span style="color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:16px">${p.ts}</span>`:`<span style="color:var(--muted)">—</span>`;
+              return `<tr class="${rowCls}">
+                <td class="${nameCls}">${p.name}${edgeMark}${girMark}</td>
+                <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center">#${p.rank}</td>
+                <td style="text-align:center"><span class="sb s${p.strokes}">${p.strokes}</span></td>
+                <td style="color:var(--accent);font-family:'Bebas Neue',sans-serif;font-size:16px;text-align:center">${p.np}</td>
+                <td style="text-align:center">${tsCell}</td>
+              </tr>`;
+            }).join('');
+          })()}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-head">Hazards</div>
+    <div class="hazard-ais-row">
+      <div class="hazard-row">
+        ${h.tags.map(t=>`<span class="hazard-tag ${t.c}">${t.t}</span>`).join('')}
+      </div>
+      <button class="ais-btn" id="aisBtnEl" onclick="triggerAIS(${h.num},${currentDay})">⚡ AIS</button>
+    </div>
+
+    ${h.par>3&&currentDay===1?`<div class="section-head">Tee Strategy</div><div class="strategy-box" id="stratTeeBox">${strat.tee||''}</div>`:`<div id="stratTeeBox" style="display:none"></div>`}
+
+    <div class="section-head">Strategy</div>
+    <div class="strategy-box" id="stratMainBox">${h.desc}<span class="divider"></span>${strat.approach}</div>
+
+    <div class="section-head">Score Capture — Day ${currentDay}</div>
+    <div id="capture_${h.num}">${renderCapture(h,currentDay)}</div>
+
+  </div>`;
+
+  // Apply AIS if cached, otherwise static content is already in place
+  if(aisData) applyStrategyContent(h,currentDay,aisData);
+  document.getElementById('mainScroll').scrollTop=0;
+}
+
+// ── NAV ────────────────────────────────────────────────────────────────────────
 function goToHole(i,dir='left'){
   if(i<0||i>=HOLES.length)return;
   const w=document.getElementById('cardWrapper');
@@ -456,27 +1326,38 @@ function goToHole(i,dir='left'){
     if(currentHole>0)document.getElementById('swipeHint').style.opacity='0';
   },200);
 }
-function nextHole(){goToHole(currentHole+1,'left');}
-function prevHole(){goToHole(currentHole-1,'right');}
+function nextHole(){if(!showingStats)goToHole(currentHole+1,'left');}
+function prevHole(){if(!showingStats)goToHole(currentHole-1,'right');}
 function setDay(d){
-  currentDay=d;
+  showingStats=false;showingTips=false;currentDay=d;
   document.querySelectorAll('.day-btn').forEach((b,i)=>b.classList.toggle('active',i+1===d));
   renderHole();
 }
+function showStats(){
+  showingStats=true;showingTips=false;
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.day-btn')[3].classList.add('active');
+  document.getElementById('holeBar').style.display='none';
+  document.getElementById('swipeHint').style.display='none';
+  renderStats();
+  document.getElementById('mainScroll').scrollTop=0;
+}
+function setStatsFilter(f){statsFilter=f;renderStats();}
 
+// ── SWIPE ──────────────────────────────────────────────────────────────────────
 const mainEl=document.getElementById('mainScroll');
 mainEl.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;},{passive:true});
 mainEl.addEventListener('touchend',e=>{
+  if(showingStats||showingTips)return;
   const dx=e.changedTouches[0].clientX-touchStartX;
   if(Math.abs(dx)>50){dx<0?nextHole():prevHole();}
 },{passive:true});
 
+// ── KEEP ALIVE ─────────────────────────────────────────────────────────────────
 async function toggleKeepAlive(){
   const btn=document.getElementById('kaBtn');
-  if(wakeLock){
-    await wakeLock.release();wakeLock=null;
-    btn.classList.remove('active');btn.textContent='KEEP ALIVE';
-  }else{
+  if(wakeLock){await wakeLock.release();wakeLock=null;btn.classList.remove('active');btn.textContent='KEEP ALIVE';}
+  else{
     try{
       wakeLock=await navigator.wakeLock.request('screen');
       btn.classList.add('active');btn.textContent='SCREEN ON';
@@ -485,21 +1366,20 @@ async function toggleKeepAlive(){
   }
 }
 document.addEventListener('visibilitychange',async()=>{
-  if(wakeLock&&document.visibilityState==='visible'){
-    try{wakeLock=await navigator.wakeLock.request('screen');}catch(e){}
-  }
+  if(wakeLock&&document.visibilityState==='visible')try{wakeLock=await navigator.wakeLock.request('screen');}catch(e){}
 });
 
+// ── PWA ────────────────────────────────────────────────────────────────────────
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').classList.add('show');});
 async function installApp(){if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;dismissInstall();}
 function dismissInstall(){document.getElementById('installBanner').classList.remove('show');}
-
 const mfst={name:"Werner's Caddie",short_name:"Caddie",start_url:"/",display:"standalone",background_color:"#080d0b",theme_color:"#0a0f0d",orientation:"portrait",
   icons:[
     {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%230a0f0d' rx='32'/><text x='96' y='130' font-size='100' text-anchor='middle'>⛳</text></svg>",sizes:"192x192",type:"image/svg+xml"},
     {src:"data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%230a0f0d' rx='80'/><text x='256' y='340' font-size='260' text-anchor='middle'>⛳</text></svg>",sizes:"512x512",type:"image/svg+xml"}
   ]};
 document.getElementById('manifest-link').href=URL.createObjectURL(new Blob([JSON.stringify(mfst)],{type:'application/json'}));
+
 
 renderHole();
 </script>
