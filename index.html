@@ -72,6 +72,41 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .full-item{font-size:13.5px;color:var(--text);line-height:1.7;padding:8px 0;}
 .full-item strong{color:var(--accent);font-weight:600;}
 .full-item+.full-item{border-top:1px solid var(--border);}
+/* Tips edit & drag */
+.tip-edit-row{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);position:relative;}
+.tip-edit-row:last-of-type{border-bottom:none;}
+.tip-drag-handle{font-size:16px;color:var(--muted);cursor:grab;flex-shrink:0;padding:2px 4px;user-select:none;touch-action:none;}
+.tip-edit-text{font-size:13.5px;color:var(--text);line-height:1.5;flex:1;cursor:pointer;}
+.tip-edit-text:hover{color:var(--accent);}
+.tip-drag-ghost{opacity:0.3;}
+.tip-drag-clone{background:var(--surface2);border:1px solid var(--accent-dim);border-radius:8px;padding:4px 8px;pointer-events:none;}
+.tip-drop-line{height:3px;border-radius:2px;margin:0;transition:background 0.1s,height 0.1s;}
+.tip-drop-line.active{background:#3dff7a;height:3px;box-shadow:0 0 6px #3dff7a;}
+.tip-edit-ta{width:100%;background:var(--surface2);border:1px solid var(--accent-dim);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;padding:8px;border-radius:6px;resize:none;outline:none;line-height:1.5;}
+.tip-edit-controls{display:flex;gap:6px;margin-top:6px;}
+.tip-edit-save{flex:2;background:var(--accent-dim);border:1px solid var(--accent);color:var(--accent);font-family:'DM Mono',monospace;font-size:11px;padding:8px;border-radius:6px;cursor:pointer;letter-spacing:1px;}
+.tip-edit-cancel{flex:1;background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;padding:8px;border-radius:6px;cursor:pointer;}
+.tip-stage-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.tip-stage-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.tip-reset-btn{font-family:'DM Mono',monospace;font-size:8px;color:var(--muted);background:none;border:none;cursor:pointer;letter-spacing:0.5px;padding:2px 4px;}
+.tip-reset-btn:active{color:var(--accent);}
+.checklist-section{margin-bottom:16px;}
+.checklist-section:last-child{margin-bottom:0;}
+.checklist-head{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.checklist-head-icon{font-size:16px;}
+.checklist-head-text{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;}
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.checklist-item:last-child{border-bottom:none;}
+.checklist-dot{width:6px;height:6px;border-radius:50%;background:var(--accent-dim);flex-shrink:0;margin-top:6px;}
+/* Interactive health checkbox */
+.chk-box{width:20px;height:20px;min-width:20px;border-radius:5px;border:1.5px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;margin-top:1px;}
+.chk-box.checked{background:var(--accent-dim);border-color:var(--accent);}
+.chk-box.checked::after{content:'✓';font-size:12px;color:var(--accent);font-weight:700;}
+.checklist-item.checked .checklist-text{color:var(--muted);text-decoration:line-through;}
+.health-clear-btn{width:100%;background:none;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:10px;border-radius:8px;cursor:pointer;margin-top:14px;text-align:center;}
+.health-clear-btn:active{background:var(--surface2);}
+.checklist-text{font-size:13.5px;color:var(--text);line-height:1.5;}
+.checklist-text strong{color:var(--accent);font-weight:600;}
 
 /* HOLE BAR */
 .hole-bar{position:fixed;top:46px;left:0;right:0;z-index:99;background:var(--bg);padding:6px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);transition:top 0.25s ease;}
@@ -1024,8 +1059,8 @@ const TIPS={
         full:['Identify all danger zones left and right — OOB, water, trees, fairway bunkers','Read the wind direction and estimate its effect on ball flight','<strong>Choose your target line and commit to it fully</strong> — aim at a specific object, not a general area','Once committed, take all decision-making off the table and move into execution mode']
       },
       rehearsal:{
-        quick:['Free swing to get loose — <strong>feel the tempo</strong>','Feel <strong>hands dropping</strong> into the slot','Feel the <strong>release</strong> — sweep upward, sternum stays back'],
-        full:['Take a free practice swing — the purpose is to get loose, not to be mechanical','Focus on <strong>tempo first</strong> — slow and wide on the way back','Feel the hands <strong>dropping into the slot</strong> at the start of the downswing','Feel the <strong>release through impact</strong> — the club sweeping upward off the tee','<strong>Sternum stays behind the ball</strong> through impact — this is what allows you to hit up']
+        quick:['Free swing to get loose — <strong>feel the tempo</strong>','<strong>3x hands drop drill</strong>','Feel the <strong>release</strong> — sweep upward, sternum stays back'],
+        full:['Take a free practice swing — the purpose is to get loose, not to be mechanical','Focus on <strong>tempo first</strong> — slow and wide on the way back','<strong>Hands drop drill (3x):</strong> swing back, then with arms and hands only drop the hands to 4 o\'clock angle, pumping 3 times, then release through the ball','Feel the <strong>release through impact</strong> — the club sweeping upward off the tee','<strong>Sternum stays behind the ball</strong> through impact — this is what allows you to hit up']
       },
       setup:{
         quick:['Ball forward — left heel/toe','Wide stance, tee high','<strong>Right side lower</strong> (K-posture tilt)','50/50 weight, <strong>light grip</strong>'],
@@ -1196,13 +1231,278 @@ const TIPS={
         full:['<strong>Focus on your close target object</strong> — stroke toward it. Let the hole look after itself.','<strong>Serve the ball to the hole</strong> — confident, committed, but with feel. Never mechanical or robotic.','Stroke is a <strong>pendulum</strong> — equal length back and through for most putts. Do not decelerate into impact.','<strong>Wait until you see grass under the ball before looking up</strong> — looking up early pulls the putter off line at the critical moment','For lag putts: <strong>bigger swing, same tempo</strong> — do not hit it harder, swing it longer','After the putt: note where it finished relative to the hole. Build your green-reading database mentally.']
       }
     }
+  },
+  preround:{
+    label:'Pre-Round',
+    isChecklist:true,
+    sections:[
+      {
+        head:'Pack List',
+        icon:'🎒',
+        items:[
+          'Freeze water bottles overnight',
+          'Golf bag — balls, tees, ball markers, spare glove, pitch repairer',
+          'Snacks / bars / beers',
+          'Rangefinder',
+          'Sunscreen',
+          'Rain gear',
+          'Small bag — lip balm, allergy drops, pitch repairer, ball marker, Annique muscle cream'
+        ]
+      },
+      {
+        head:'Warm-Up · 40 min',
+        icon:'⛳',
+        items:[
+          '<strong>Stretches · 5 min</strong> — full body loosening with stretch band',
+          '<strong>Long game · 10 min</strong> — full shots, focus on contact and feel, not power. Find your rhythm.',
+          '<strong>Chipping · 15 min</strong> — 5 min contact focus (R1 + R2, brush the bounce), then 10 min game mode: 3 balls, no preferred lies, cycle through 8i / PW / SW / LW, focus on release selection',
+          '<strong>Putting · 10 min</strong> — 5 min lag game (3-putt drill, get within bin lid), then 5 min consecutive straight putts at 1m / 2m / 3m'
+        ]
+      }
+    ]
+  },
+  health:{
+    label:'Health',
+    isChecklist:true,
+    isInteractive:true,
+    sections:[
+      {
+        head:'Morning',
+        icon:'🌅',
+        items:[
+          '<strong>Meds</strong> — Essentials (liver support), Vivance, Rehydrate, Omega 3',
+          '<strong>Protein + Creatine</strong>',
+          '<strong>Move</strong> — jump, stretch, light exercise — sweat out the toxins',
+          '<strong>Shower</strong>',
+          '<strong>Water bottles</strong> — fill and freeze overnight bottles',
+          '<strong>Pack bag</strong> — beers, Energade, water, sunscreen',
+          '<strong>Breakfast</strong> — proper meal, carbs + protein'
+        ]
+      },
+      {
+        head:'Evening',
+        icon:'🌙',
+        items:[
+          '<strong>Cold beer</strong> — earned it 🍺',
+          '<strong>Eat a proper meal</strong> — lines the stomach',
+          '<strong>Freeze water + ice blocks</strong> for tomorrow',
+          '<strong>Shower</strong>',
+          '<strong>Meds</strong> — Essentials (liver support), Rehydrate',
+          '<strong>Sleep by 11pm</strong> — match play mindset, today affects tomorrow'
+        ]
+      }
+    ]
   }
 };
 
-function renderStage(stageData, mode){
+function renderStage(stageData, mode, tabKey, stageKey){
   const items = mode==='quick' ? stageData.quick : stageData.full;
-  if(!items) return '';
-  return items.map(item=>`<div class="full-item">${item}</div>`).join('');
+  if(!items) return {html:'',needsEdit:false};
+  const containerId=`tipedit_${tabKey}_${stageKey}_${mode}`;
+  return {
+    html:`<div id="${containerId}" class="tip-edit-container"></div>`,
+    containerId,
+    defaultItems:items,
+    tabKey,
+    stageKey
+  };
+}
+
+// ── TIPS EDIT & DRAG SYSTEM ────────────────────────────────────────────────────
+function getTipsOverrides(){
+  try{const s=localStorage.getItem('tips_overrides');return s?JSON.parse(s):{};} catch(e){return{};}
+}
+function saveTipsOverrides(o){
+  try{localStorage.setItem('tips_overrides',JSON.stringify(o));}catch(e){}
+}
+function getTipItems(tabKey,stageKey,defaults){
+  const o=getTipsOverrides();
+  const k=`${tabKey}.${stageKey}`;
+  return o[k]?o[k]:defaults;
+}
+function saveTipItems(tabKey,stageKey,items){
+  const o=getTipsOverrides();
+  o[`${tabKey}.${stageKey}`]=items;
+  saveTipsOverrides(o);
+}
+function resetTipStage(tabKey,stageKey){
+  const o=getTipsOverrides();
+  delete o[`${tabKey}.${stageKey}`];
+  saveTipsOverrides(o);
+  renderTips();
+}
+
+// Drag state
+let _drag={active:false,el:null,startY:0,origIdx:0,tabKey:'',stageKey:'',items:[],clone:null,dropIdx:-1};
+
+function renderEditableList(tabKey,stageKey,defaultItems,containerId){
+  const items=getTipItems(tabKey,stageKey,defaultItems);
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  el.innerHTML='';
+  items.forEach((item,i)=>{
+    const row=document.createElement('div');
+    row.className='tip-edit-row';
+    row.dataset.idx=i;
+    row.innerHTML=`
+      <div class="tip-drag-handle" data-tab="${tabKey}" data-stage="${stageKey}" data-idx="${i}">⠿</div>
+      <div class="tip-edit-text" data-tab="${tabKey}" data-stage="${stageKey}" data-idx="${i}">${item}</div>`;
+    // Drop indicator
+    const drop=document.createElement('div');
+    drop.className='tip-drop-line';
+    drop.dataset.dropidx=i;
+    el.appendChild(drop);
+    el.appendChild(row);
+  });
+  // Final drop zone
+  const lastDrop=document.createElement('div');
+  lastDrop.className='tip-drop-line';
+  lastDrop.dataset.dropidx=items.length;
+  el.appendChild(lastDrop);
+
+  // Edit on tap
+  el.querySelectorAll('.tip-edit-text').forEach(t=>{
+    t.addEventListener('click',function(){
+      const tab=this.dataset.tab,stage=this.dataset.stage,idx=parseInt(this.dataset.idx);
+      const curItems=getTipItems(tab,stage,defaultItems);
+      // Strip HTML for editing
+      const tmp=document.createElement('div');tmp.innerHTML=curItems[idx];
+      const plain=tmp.textContent;
+      const ta=document.createElement('textarea');
+      ta.className='tip-edit-ta';
+      ta.value=plain;
+      ta.rows=3;
+      const saveBtn=document.createElement('button');
+      saveBtn.className='tip-edit-save';saveBtn.textContent='SAVE';
+      const cancelBtn=document.createElement('button');
+      cancelBtn.className='tip-edit-cancel';cancelBtn.textContent='CANCEL';
+      const wrap=document.createElement('div');
+      wrap.className='tip-edit-controls';
+      wrap.appendChild(cancelBtn);wrap.appendChild(saveBtn);
+      this.replaceWith(ta);
+      ta.parentNode.appendChild(wrap);
+      ta.focus();ta.select();
+      saveBtn.onclick=()=>{
+        const newItems=[...getTipItems(tab,stage,defaultItems)];
+        newItems[idx]=ta.value.trim()||newItems[idx];
+        saveTipItems(tab,stage,newItems);
+        renderEditableList(tab,stage,defaultItems,containerId);
+      };
+      cancelBtn.onclick=()=>renderEditableList(tab,stage,defaultItems,containerId);
+    });
+  });
+
+  // Drag on handle
+  el.querySelectorAll('.tip-drag-handle').forEach(h=>{
+    h.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      const tab=this.dataset.tab,stage=this.dataset.stage,idx=parseInt(this.dataset.idx);
+      const items=getTipItems(tab,stage,defaultItems);
+      const row=this.closest('.tip-edit-row');
+      const rect=row.getBoundingClientRect();
+      const clone=row.cloneNode(true);
+      clone.className='tip-edit-row tip-drag-clone';
+      clone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;z-index:999;opacity:0.9;`;
+      document.body.appendChild(clone);
+      row.classList.add('tip-drag-ghost');
+      _drag={active:true,el:row,startY:e.touches[0].clientY,origIdx:idx,tabKey:tab,stageKey:stage,items:[...items],clone,dropIdx:idx,containerId,defaultItems};
+    },{passive:false});
+  });
+}
+
+document.addEventListener('touchmove',function(e){
+  if(!_drag.active)return;
+  e.preventDefault();
+  const y=e.touches[0].clientY;
+  _drag.clone.style.top=(parseFloat(_drag.clone.style.top)+(y-_drag.startY))+'px';
+  _drag.startY=y;
+  // Find drop target
+  const container=document.getElementById(_drag.containerId);
+  if(!container)return;
+  const drops=container.querySelectorAll('.tip-drop-line');
+  let best=-1,bestDist=9999;
+  drops.forEach(d=>{
+    const r=d.getBoundingClientRect();
+    const mid=r.top+r.height/2;
+    const dist=Math.abs(y-mid);
+    if(dist<bestDist){bestDist=dist;best=parseInt(d.dataset.dropidx);}
+  });
+  if(best!==_drag.dropIdx){
+    _drag.dropIdx=best;
+    drops.forEach(d=>d.classList.toggle('active',parseInt(d.dataset.dropidx)===best));
+  }
+},{passive:false});
+
+document.addEventListener('touchend',function(){
+  if(!_drag.active)return;
+  _drag.clone.remove();
+  _drag.el.classList.remove('tip-drag-ghost');
+  const drops=document.querySelectorAll('.tip-drop-line');
+  drops.forEach(d=>d.classList.remove('active'));
+  const from=_drag.origIdx;
+  let to=_drag.dropIdx;
+  if(to!==from&&to!==from+1){
+    const items=[..._drag.items];
+    const [moved]=items.splice(from,1);
+    if(to>from)to--;
+    items.splice(to,0,moved);
+    saveTipItems(_drag.tabKey,_drag.stageKey,items);
+    renderEditableList(_drag.tabKey,_drag.stageKey,_drag.defaultItems,_drag.containerId);
+  }
+  _drag.active=false;
+});
+function getHealthState(){
+  try{const s=localStorage.getItem('health_checks');return s?JSON.parse(s):{};}catch(e){return{};}
+}
+function setHealthCheck(id,val){
+  const s=getHealthState();s[id]=val;
+  try{localStorage.setItem('health_checks',JSON.stringify(s));}catch(e){}
+}
+function clearHealthChecks(){
+  try{localStorage.removeItem('health_checks');}catch(e){}
+  renderTips();
+}
+function toggleHealthCheck(id){
+  const s=getHealthState();
+  setHealthCheck(id,!s[id]);
+  // Update DOM directly without full re-render
+  const item=document.getElementById('hci_'+id);
+  if(!item)return;
+  const box=item.querySelector('.chk-box');
+  const checked=!getHealthState()[id]||false;
+  // re-read after set
+  const nowChecked=getHealthState()[id];
+  item.classList.toggle('checked',nowChecked);
+  box.classList.toggle('checked',nowChecked);
+}
+
+function renderChecklist(tip){
+  const state=tip.isInteractive?getHealthState():{};
+  let html=tip.sections.map((s,si)=>`
+    <div class="checklist-section">
+      <div class="checklist-head">
+        <div class="checklist-head-icon">${s.icon}</div>
+        <div class="checklist-head-text">${s.head}</div>
+      </div>
+      ${s.items.map((item,ii)=>{
+        if(!tip.isInteractive){
+          return`<div class="checklist-item">
+            <div class="checklist-dot"></div>
+            <div class="checklist-text">${item}</div>
+          </div>`;
+        }
+        const id=`${si}_${ii}`;
+        const checked=!!state[id];
+        return`<div class="checklist-item${checked?' checked':''}" id="hci_${id}" onclick="toggleHealthCheck('${id}')">
+          <div class="chk-box${checked?' checked':''}"></div>
+          <div class="checklist-text">${item}</div>
+        </div>`;
+      }).join('')}
+    </div>`).join('');
+  if(tip.isInteractive){
+    html+=`<button class="health-clear-btn" onclick="clearHealthChecks()">CLEAR ALL</button>`;
+  }
+  return html;
 }
 
 function renderTips(){
@@ -1215,20 +1515,17 @@ function renderTips(){
 
   const tip=TIPS[tipsTab];
 
-  // Core stages always shown
   const coreStages=[
     {key:'assessment', label:'Assessment'},
     {key:'rehearsal',  label:'Rehearsal'},
     {key:'setup',      label:'Setup'},
     {key:'swing',      label:'Swing'}
   ];
-  // Extra stages — full mode only
   const extraStages=[
     {key:'foundations', label:'Foundations'},
     {key:'drills',      label:'Drills'}
   ];
 
-  // Traffic light block for chip/bunker assessment
   const trafficLight=`
     <div class="traffic-row" style="margin-top:10px">
       <div class="tl-chip red"><div class="tl-icon">🔴</div><div class="tl-label">Hard pan<br>R1 only</div></div>
@@ -1237,55 +1534,47 @@ function renderTips(){
     </div>`;
 
   let content='';
+  const editJobs=[]; // deferred: {containerId, tabKey, stageKey, defaultItems}
 
-  // In full mode, show foundations first if available
-  if(tipsMode==='full'){
-    extraStages.filter(s=>s.key==='foundations').forEach(s=>{
+  if(tip.isChecklist){
+    content=renderChecklist(tip);
+  } else {
+    const allStages=tipsMode==='full'
+      ?[...extraStages.filter(s=>s.key==='foundations'),...coreStages,...extraStages.filter(s=>s.key==='drills')]
+      :coreStages;
+
+    allStages.forEach(s=>{
       const stageData=tip.stages[s.key];
-      if(!stageData||!stageData.full) return;
+      if(!stageData) return;
+      const defaults=tipsMode==='quick'?stageData.quick:stageData.full;
+      if(!defaults||!defaults.length) return;
+      const r=renderStage(stageData,tipsMode,tipsTab,s.key);
       content+=`<div class="full-section">
-        <div class="full-section-head">${s.label}</div>
-        ${renderStage(stageData, 'full')}
+        <div class="tip-stage-header">
+          <div class="tip-stage-label">${s.label}</div>
+          <button class="tip-reset-btn" onclick="resetTipStage('${tipsTab}','${s.key}')">↺ reset</button>
+        </div>
+        ${r.html}
+        ${(s.key==='assessment'&&(tipsTab==='chip'||tipsTab==='bunker'))?trafficLight:''}
       </div>`;
-    });
-  }
-
-  // Core stages
-  coreStages.forEach(s=>{
-    const stageData=tip.stages[s.key];
-    if(!stageData) return;
-    const rendered=renderStage(stageData, tipsMode);
-    if(!rendered) return;
-    content+=`<div class="full-section">
-      <div class="full-section-head">${s.label}</div>
-      ${rendered}
-      ${(s.key==='assessment'&&(tipsTab==='chip'||tipsTab==='bunker'))?trafficLight:''}
-    </div>`;
-  });
-
-  // In full mode, show drills last if available
-  if(tipsMode==='full'){
-    extraStages.filter(s=>s.key==='drills').forEach(s=>{
-      const stageData=tip.stages[s.key];
-      if(!stageData||!stageData.full) return;
-      content+=`<div class="full-section">
-        <div class="full-section-head">${s.label}</div>
-        ${renderStage(stageData, 'full')}
-      </div>`;
+      editJobs.push({containerId:r.containerId,tabKey:tipsTab,stageKey:s.key,defaultItems:defaults});
     });
   }
 
   document.getElementById('holeCard').innerHTML=`
   <div class="tips-page">
-    <div class="tips-toggle">
+    ${tip.isChecklist?'':`<div class="tips-toggle">
       <button class="tt-btn ${tipsMode==='quick'?'active':''}" onclick="setTipsMode('quick')">⚡ Quick</button>
       <button class="tt-btn ${tipsMode==='full'?'active':''}" onclick="setTipsMode('full')">📖 Full</button>
-    </div>
+    </div>`}
     <div class="tips-tabs">
       ${Object.entries(TIPS).map(([k,v])=>`<button class="tip-tab ${tipsTab===k?'active':''}" onclick="setTipsTab('${k}')">${v.label}</button>`).join('')}
     </div>
     <div class="tip-card">${content}</div>
   </div>`;
+
+  // Wire up editable lists after DOM is rendered
+  editJobs.forEach(j=>renderEditableList(j.tabKey,j.stageKey,j.defaultItems,j.containerId));
 
   document.getElementById('mainScroll').scrollTop=0;
 }
