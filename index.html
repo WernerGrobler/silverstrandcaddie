@@ -423,35 +423,78 @@ const HOLES=[
    notes:"Bunkers and the river are in play standing on the tee box. After a good drive you are left with an accurate approach shot. Do not miss the green to the left because the dam is very much in play. Good finishing hole."}
 ];
 
-const GIR_TARGET=new Set(HOLES.filter(h=>[13,14,15,16,17,18].includes(h.si)).map(h=>h.num));
-const DAY_FORMAT={1:'American Scramble Drive (both tee off, best drive selected, each plays own ball from there — better Stableford score counts for EU)',2:'2-Ball Better Ball Stableford (each plays own ball throughout, better net Stableford score per hole counts for EU)',3:'Singles Stableford (individual net Stableford, target 36+ points)'};
+// Day 1: werner/deon vs cilliers/christo | Day 2: werner/carlo vs stephan/ronald
+// Strokes stored per player per hole
+const D1={
+  werner:{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:2,10:2,11:1,12:1,13:1,14:1,15:2,16:1,17:1,18:1},
+  deon:  {1:0,2:0,3:0,4:1,5:1,6:0,7:0,8:1,9:1,10:1,11:0,12:0,13:1,14:0,15:1,16:0,17:1,18:0},
+  opp1:  {1:0,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:1,15:1,16:0,17:1,18:1}, // cilliers HCI16
+  opp2:  {1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:2,9:2,10:2,11:1,12:1,13:1,14:1,15:2,16:1,17:1,18:1}  // christo HCI22
+};
+const D2={
+  werner:{1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:2,10:2,11:1,12:1,13:1,14:1,15:2,16:1,17:1,18:1},
+  carlo: {1:1,2:1,3:1,4:1,5:1,6:1,7:1,8:1,9:2,10:1,11:1,12:1,13:1,14:1,15:2,16:1,17:1,18:1}, // HCI20
+  opp1:  {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:1,9:1,10:1,11:0,12:0,13:0,14:0,15:1,16:0,17:0,18:0}, // stephan HCI4
+  opp2:  {1:1,2:1,3:1,4:2,5:2,6:1,7:1,8:2,9:2,10:2,11:1,12:1,13:2,14:1,15:2,16:1,17:2,18:1}  // ronald HCI26
+};
+// Day 3 TBD — use Day 1 data as placeholder
+const D3=D1;
 
-// ── RANKS — 1=hardest scoring opportunity, 18=easiest ──────────────────────────
-function buildRanks(p){
-  // Sort: tier 2 strokes first, then tier 1, then tier 0
-  // Within each tier: highest SI first (was easiest = old rank 1)
-  // Then invert: newRank = 19 - oldRank so rank 1 = hardest, 18 = easiest
-  const t2=HOLES.filter(h=>h[p]===2).sort((a,b)=>b.si-a.si);
-  const t1=HOLES.filter(h=>h[p]===1).sort((a,b)=>b.si-a.si);
-  const t0=HOLES.filter(h=>h[p]===0).sort((a,b)=>b.si-a.si);
+function getPlayerStrokes(day){
+  if(day===2) return D2;
+  if(day===3) return D3;
+  return D1;
+}
+const GIR_TARGET=new Set(HOLES.filter(h=>[13,14,15,16,17,18].includes(h.si)).map(h=>h.num));
+const DAY_FORMAT={1:'American Scramble Drive',2:'2-Ball Better Ball Stableford',3:'Singles Stableford'};
+const DAY_PARTNER={1:'Deon (HCI 8)',2:'Carlo (HCI 20)',3:null};
+const DAY_OPP={
+  1:{p1:'Cilliers (HCI 16)',p2:'Christo (HCI 22)'},
+  2:{p1:'Stephan (HCI 4)',p2:'Ronald (HCI 26)'},
+  3:{p1:'TBD',p2:null}
+};
+
+// ── RANKS — day-aware, 1=hardest scoring opportunity, 18=easiest ───────────────
+function buildRanksFromStrokes(strokeMap){
+  const t2=HOLES.filter(h=>strokeMap[h.num]===2).sort((a,b)=>b.si-a.si);
+  const t1=HOLES.filter(h=>strokeMap[h.num]===1).sort((a,b)=>b.si-a.si);
+  const t0=HOLES.filter(h=>strokeMap[h.num]===0).sort((a,b)=>b.si-a.si);
   const m={};[...t2,...t1,...t0].forEach((h,i)=>{m[h.num]=19-(i+1);});return m;
 }
-const R={w:buildRanks('werner'),d:buildRanks('deon'),c:buildRanks('cilliers'),x:buildRanks('christo')};
+function buildRanks(p){
+  // Legacy: used for Day 1 hole card rendering (werner/deon/cilliers/christo)
+  const strokeMap={};
+  HOLES.forEach(h=>{strokeMap[h.num]=D1[p]?D1[p][h.num]:0;});
+  return buildRanksFromStrokes(strokeMap);
+}
+const R={w:buildRanks('werner'),d:buildRanks('deon'),c:buildRanks('opp1'),x:buildRanks('opp2')};
 
-// ── ZONES ──────────────────────────────────────────────────────────────────────
-const ZD=(()=>{
+function getRanksForDay(day){
+  const ps=getPlayerStrokes(day);
+  return{
+    w:buildRanksFromStrokes(ps.werner),
+    p:buildRanksFromStrokes(ps[day===2?'carlo':'deon']||ps.deon),
+    o1:buildRanksFromStrokes(ps.opp1),
+    o2:buildRanksFromStrokes(ps.opp2)
+  };
+}
+
+// ── ZONES — day-aware ──────────────────────────────────────────────────────────
+function buildZD(day){
+  const rd=getRanksForDay(day);
   const zm={},em={},um={},intensity={};
+  // Day 2 EU range 3-35: soft 3-13, medium 14-24, full 25-35
+  // Day 1 EU range 7-31: soft 7-15, medium 16-23, full 24-31
+  const isD2=(day===2);
   HOLES.forEach(h=>{
-    const eu=R.w[h.num]+R.d[h.num],us=R.c[h.num]+R.x[h.num];
-    // Higher combined rank = easier holes = scoring advantage
+    const eu=rd.w[h.num]+rd.p[h.num],us=rd.o1[h.num]+rd.o2[h.num];
     zm[h.num]=eu>us?'attack':us>eu?'defend':'contest';
     em[h.num]=eu;um[h.num]=us;
-    // Intensity based on EU combined rank (range 7–31, 1=hardest→18=easiest)
-    // 7–15 = soft, 16–23 = medium, 24–31 = full
-    intensity[h.num]=eu>=24?3:eu>=16?2:1;
+    intensity[h.num]=isD2?(eu>=25?3:eu>=14?2:1):(eu>=24?3:eu>=16?2:1);
   });
   return{zm,em,um,intensity};
-})();
+}
+const ZD=buildZD(1); // default Day 1, overridden per render
 
 // ── STATIC STRATEGY HELPERS ────────────────────────────────────────────────────
 function teeChar(num){return{1:'tight',2:'tight',4:'tight',5:'tight',6:'tight',8:'tight',9:'open',10:'tight',12:'open',13:'tight',15:'tight',16:'tight',17:'carry',18:'tight'}[num]||'open';}
@@ -494,19 +537,54 @@ function scrambleApproach(h){
   return resp+threat;
 }
 function getStaticStrategy(h,day){
-  const zone=ZD.zm[h.num],wR=R.w[h.num],dR=R.d[h.num];
-  const leader=wR<dR?'werner':dR<wR?'deon':'equal';
+  const dayZD=buildZD(day);
+  const dayR=getRanksForDay(day);
+  const ps=getPlayerStrokes(day);
+  const zone=dayZD.zm[h.num];
+  const wR=dayR.w[h.num];
+  const pR=dayR.p[h.num];
+  const o1R=dayR.o1[h.num];
+  const o2R=dayR.o2[h.num];
+  const wStr=ps.werner[h.num];
+  const pStr=(day===2?ps.carlo:ps.deon)[h.num];
+  const o1Str=ps.opp1[h.num];
+  const o2Str=ps.opp2[h.num];
+
   if(day===1){
+    const leader=wR>=pR?'werner':'deon';
     if(h.par===3)return{tee:null,approach:par3Strat(h,zone)};
     return{tee:teeStrat(h,leader),approach:scrambleApproach(h)};
   }
+
+  if(day===2){
+    const d2strat={
+      1: `Par 5 — both need a good drive to get in range in two. **Canal hard left**, aim right of the blue gum tree. Ronald strokes here — EU must convert to block. Both attack the approach to give yourselves two birdie chances.`,
+      2: `Short par 4 — short iron approach for both. **Don't go long** into the back trees. Stephan no stroke here — EU has the relative edge. One safe to the fat of the green, other attacks the pin.`,
+      3: `Par 3 — club selection is everything with the wind. **Grass bank left, bunkers right** — aim straight at the centre. Stephan no stroke here — a solid par blocks him. Both aim middle, no heroics.`,
+      4: `Par 4 — elevated green plays longer. **Water right, bunker left** — bail out space to the right off the tee. Ronald doubles here — EU must match with a 3-pointer. One safe middle green, other attacks the pin.`,
+      5: `Long par 5 — **don't miss the green left** on the third, right is recoverable. Ronald doubles here — EU must score 3 to block. Both get in position off the tee, then one attacks the green aggressively.`,
+      6: `Short par 4 — **stay out of the front-left bunker** on the approach. Stephan no stroke — EU edge. Take a full club to clear the bunker, aim middle-right, let one attack the pin.`,
+      7: `Island green — **water all sides, no bail-out**. Stephan no stroke here. Commit to the number, both aim dead centre. A par is an excellent score, don't be a hero.`,
+      8: `Tough driving hole — **water right, bunkers left**. Both Werner and Stephan stroke here. Severe slope right of green — aim middle. One safe, one attacks. Key hole — don't give a double away.`,
+      9: `Long par 4 — **bunker guards the green left**, short-right is safest miss. Both Werner and Carlo double here — two strong scoring chances. One attacks the pin, other plays safe right half. Expect 3 points from this hole.`,
+      10:`Hardest hole — **dam left of fairway and green**. Werner doubles. Carlo one stroke. Aim right half on every shot — dam is unforgiving. Werner leads the scoring here with 2 strokes. Solid bogey or better blocks US.`,
+      11:`Par 3 — **pot bunker front centre must be cleared**. Stephan no stroke. Take one extra club, land on the putting surface. Going long is tough but better than the bunker. Both aim centre.`,
+      12:`Long uphill par 5 — **plays one club longer throughout**. Take extra club on every shot. **Don't miss green left or right** — both sides bunkered. Stephan no stroke — EU scoring opportunity. Patient three-shot management wins this.`,
+      13:`Par 4 — **water right off the tee, dam right of green**. Ronald doubles here — EU must block with a 3-pointer. Tee left-centre, approach dead middle. Both need to be on the green for birdie chances.`,
+      14:`Narrow par 3 — **long and narrow green, tough either side**. Aim straight centre every time. Stephan no stroke — EU edge. Missing long or short of centre beats missing either side.`,
+      15:`Hardest hole — **pothole bunker in fairway, carry it**. Both Werner and Carlo double — two big scoring chances for EU. **Bunker short-left on approach** — aim middle-right. Expect 3-4 points combined from this hole.`,
+      16:`Short par 4 — **4 bunkers in the landing zone, take iron off tee**. Both stroke here. Elevated green plays longer than it looks. One attacks the pin, other plays safe to two-putt zone.`,
+      17:`River carry — **commit to the carry, don't lay up short**. Uphill approach plays one club longer. **Three bunkers guard the green** — aim centre. Ronald doubles here. Both need to find the fairway to set up scoring positions.`,
+      18:`Par 5 finishing hole — **dam hard left of the green**. River off the tee — right side is safe. Approach from right half. Ronald strokes — EU must score to close out or protect the match. Both attack, right of centre on the approach.`
+    };
+    return{tee:null,approach:d2strat[h.num]||h.desc};
+  }
+
+  // Day 3 fallback
   const zNote=zone==='attack'?'Priority hole — commit to getting your net score.'
     :zone==='defend'?'US-favoured hole. Bogey is a solid result.'
     :'Steady play, take what the hole gives.';
-  let txt=`<span class="hl">Werner's scoring rank: #${wR} of 18.</span> ${zNote}`;
-  if(h.christo===2) txt+=` <span class="warn">Christo doubles here.</span>`;
-  if(h.cilliers===0) txt+=` <span class="hl">Cilliers no stroke — EU edge.</span>`;
-  return{tee:null,approach:txt};
+  return{tee:null,approach:`${zNote}`};
 }
 
 // ── MATCH SCORE ────────────────────────────────────────────────────────────────
@@ -618,12 +696,26 @@ async function generateAIS(holeNum,day){
   const apiKey=getApiKey();
   if(!apiKey){showApiKeyPrompt(()=>generateAIS(holeNum,day));return;}
   const h=HOLES[holeNum-1];
-  const zone=ZD.zm[h.num];
+  const dayZD=buildZD(day);
+  const dayR=getRanksForDay(day);
+  const ps=getPlayerStrokes(day);
   const ms=calcMatchScore(day,currentHole);
-  const wNP=h.par+h.werner;
+  const wStr=ps.werner[h.num];
+  const pStr=(day===2?ps.carlo:ps.deon)[h.num];
+  const o1Str=ps.opp1[h.num];
+  const o2Str=ps.opp2[h.num];
   const isGIRTarget=GIR_TARGET.has(h.num);
+  const intensityVal=dayZD.intensity[h.num];
+  const intensityLabel=intensityVal===3?'FULL (›››)':intensityVal===2?'MEDIUM (››)':'SOFT (›)';
+  const rangeMax=day===2?35:31;
+  const partner=DAY_PARTNER[day]||'Partner';
+  const opp=DAY_OPP[day];
 
-  const systemPrompt=`You are Werner's caddie in a Ryder Cup match. Be direct, confident and encouraging — like a trusted caddie who believes in the player. Inspire confidence, remove pressure. Never list dangers without a solution.
+  const isDay1=day===1;
+  const isDay2=day===2;
+
+  const systemPrompt=isDay1?
+`You are Werner's caddie in a Ryder Cup match. Be direct, confident and encouraging — like a trusted caddie who believes in the player. Inspire confidence, remove pressure. Never list dangers without a solution.
 
 Werner already sees on screen: par, SI, distance, strokes, player ranks, match score, hazards. Do NOT repeat any of this. Assume he knows the situation.
 
@@ -640,11 +732,11 @@ Derive posture from holes remaining vs lead/deficit:
 STEP 2 — ZONE + INTENSITY (shapes how to execute the posture)
 EU Intensity = EU combined scoring rank (7=hardest, 31=easiest).
 - Attack zone: EU has easier holes than US — execute posture with confidence
-- Defend zone: course is against EU — posture requires more effort, US will likely score well here too
+- Defend zone: course is against EU — posture requires more effort
 - Full intensity (rank 24-31): both EU players on easy holes — maximise the posture
 - Soft intensity (rank 7-15): EU on harder holes — be precise, not reckless
 
-STEP 3 — SHOT ORDER (Day 1 only)
+STEP 3 — SHOT ORDER (Day 1 scramble only)
 Safe player goes FIRST, attacker goes SECOND with safety net in place.
 ALL OUT posture: both go aggressive — Werner rips driver, Deon also attacks.
 MANAGE posture: Deon anchors with consistent drive, Werner follows safe line.
@@ -654,19 +746,53 @@ Apply same logic to approach shots.
 STEP 4 — COURSE LAYOUT (always)
 Name the specific hazard and where to land/aim. Frame it as instruction not warning.
 
-PLAYER CONTEXT (Day 1): Werner driver ~260m inconsistent, hybrid/iron reliable. Deon HCI 8, very consistent 260m.
-DAY 2/3: Werner individual only — ignore partner.
+PLAYER CONTEXT: Werner driver ~260m inconsistent, hybrid/iron reliable. Deon HCI 8, very consistent 260m.
 
 FORMAT: **bold** one critical hazard per field. One sentence is enough if it covers it.
-LIMITS: tee max 180 chars · strategy max 320 chars · omit tee if par 3 or Day 2/3
-Return JSON only: {"tee":"...","strategy":"..."}`;
+LIMITS: tee max 180 chars · strategy max 320 chars · omit tee if par 3
+Return JSON only: {"tee":"...","strategy":"..."}`
+:
+`You are Werner's caddie in a Ryder Cup match. Be direct, confident and encouraging. Inspire confidence, remove pressure. Never list dangers without a solution.
 
-  const intensityVal=ZD.intensity[h.num];
-  const intensityLabel=intensityVal===3?'FULL (›››)':intensityVal===2?'MEDIUM (››)':'SOFT (›)';
-  const userMsg=`Hole ${h.num} — ${h.name} — Day ${day} — ${DAY_FORMAT[day].split('(')[0].trim()}
-Zone: ${ZD.zm[h.num].toUpperCase()} — EU Intensity: ${intensityLabel} (EU rank ${ZD.em[h.num]}/31)
-Werner rank #${R.w[h.num]}/18 (${h.werner} stroke${h.werner!==1?'s':''})${isGIRTarget?' · GIR TARGET':''}
-Deon rank #${R.d[h.num]}/18 (${h.deon} stroke${h.deon!==1?'s':''}) · Cilliers rank #${R.c[h.num]}/18 · Christo rank #${R.x[h.num]}/18
+Werner already sees on screen: par, SI, distance, strokes, player ranks, match score, hazards. Do NOT repeat any of this.
+
+FORMAT: Day 2 — 2-Ball Better Ball. Each player plays their own ball. Best Stableford score per hole counts for EU. No scramble, no picking up — each player plays independently throughout.
+
+DECISION SEQUENCE:
+
+STEP 1 — MATCH MATH (overrides everything)
+- Can close out (up ≥ holes remaining): ALL OUT
+- Comfortable lead (up > holes/2): MANAGE — no mistakes
+- Close match (level or ±1): BALANCED — apply pressure
+- Need holes back (2-3 down): FIGHT — must score
+- Must win everything (down ≥ holes remaining - 1): ALL OUT FIGHT
+
+STEP 2 — ZONE + INTENSITY (EU rank 3=hardest, 35=easiest)
+- Attack zone + Full (25-35): EU on easy holes — maximise posture
+- Attack zone + Medium (14-24): clear EU edge — execute carefully  
+- Defend zone: US-favoured — fight harder, US will score well here
+- Soft intensity (3-13): both teams on hard holes — precision over aggression
+
+STEP 3 — BETTER BALL TEAM INTERPLAY
+Key tactical principle: if one EU player has secured a good score on the hole, the other can attack more aggressively knowing the team score is covered.
+- Werner and Carlo play similar games — inconsistent off the tee but dangerous once in scoring position
+- If either gets in play off the tee, both should attack the approach
+- Carlo is a strong short game player — if Werner is in trouble, Carlo can still save the hole
+- Ronald (HCI 26) is dangerous on shorter holes where he strokes — he gets 2 strokes on SI 1-8. Inconsistent long game but a threat close in.
+- Stephan (HCI 4) is consistent — expects 2 points on most holes. Dangerous on SI 1-4 where he strokes.
+
+STEP 4 — COURSE LAYOUT (always)
+Name the specific hazard and where to land/aim. Frame as instruction not warning.
+
+FORMAT: **bold** one critical hazard. One sentence is enough. No tee strategy box for Day 2.
+LIMITS: strategy max 320 chars
+Return JSON only: {"strategy":"..."}`;
+
+  const userMsg=`Hole ${h.num} — ${h.name} — Day ${day} — ${DAY_FORMAT[day]}
+Zone: ${dayZD.zm[h.num].toUpperCase()} — EU Intensity: ${intensityLabel} (EU rank ${dayZD.em[h.num]}/${rangeMax})
+Werner rank #${dayR.w[h.num]}/18 (${wStr} stroke${wStr!==1?'s':''})${isGIRTarget?' · GIR TARGET':''}
+${partner} rank #${dayR.p[h.num]}/18 (${pStr} stroke${pStr!==1?'s':''})
+${opp.p1} rank #${dayR.o1[h.num]}/18 (${o1Str} stroke${o1Str!==1?'s':''})${opp.p2?` · ${opp.p2} rank #${dayR.o2[h.num]}/18 (${o2Str} stroke${o2Str!==1?'s':''})`:''}
 Match: ${ms.label} with ${ms.holesRemaining} holes left
 Course notes: ${h.notes}`;
 
@@ -745,12 +871,15 @@ function triggerAIS(holeNum,day){
 function scoreKey(day,holeNum){return `d${day}_h${holeNum}`;}
 function loadScore(day,holeNum){try{const r=localStorage.getItem(scoreKey(day,holeNum));return r?JSON.parse(r):null;}catch(e){return null;}}
 function saveScore(day,holeNum,data){try{localStorage.setItem(scoreKey(day,holeNum),JSON.stringify(data));}catch(e){}}
-function defaultScore(h){return{fir:null,gir:null,putts:2,ud:'na',penalty:0,score:h.par+h.werner,result:null};}
+function defaultScore(h,day){
+  const ps=getPlayerStrokes(day||currentDay);
+  return{fir:null,gir:null,putts:2,ud:'na',penalty:0,score:h.par+ps.werner[h.num],result:null};
+}
 
 // ── SCORE CAPTURE UI ──────────────────────────────────────────────────────────
 function renderCapture(h,day){
   const stored=loadScore(day,h.num);
-  const s=stored||defaultScore(h);
+  const s=stored||defaultScore(h,day);
   const isPar3=h.par===3;
   const girAchieved=s.gir===true;
   const scoreDefault=h.par+h.werner;
@@ -834,7 +963,7 @@ function renderCapture(h,day){
 
 function captureToggle(holeNum,field,val){
   const h=HOLES[holeNum-1];
-  const s=loadScore(currentDay,holeNum)||defaultScore(h);
+  const s=loadScore(currentDay,holeNum)||defaultScore(h,currentDay);
   s[field]=s[field]===val?null:val;
   if(field==='gir'&&s.gir===true)s.ud='na';
   saveScore(currentDay,holeNum,s);
@@ -842,7 +971,7 @@ function captureToggle(holeNum,field,val){
 }
 function captureUD(holeNum,val){
   const h=HOLES[holeNum-1];
-  const s=loadScore(currentDay,holeNum)||defaultScore(h);
+  const s=loadScore(currentDay,holeNum)||defaultScore(h,currentDay);
   if(s.gir===true)return;
   s.ud=s.ud===val?'na':val;
   saveScore(currentDay,holeNum,s);
@@ -850,7 +979,7 @@ function captureUD(holeNum,val){
 }
 function captureCounter(holeNum,field,delta){
   const h=HOLES[holeNum-1];
-  const s=loadScore(currentDay,holeNum)||defaultScore(h);
+  const s=loadScore(currentDay,holeNum)||defaultScore(h,currentDay);
   const mins={putts:0,penalty:0,score:1};
   s[field]=Math.max(mins[field],(s[field]||0)+delta);
   saveScore(currentDay,holeNum,s);
@@ -869,12 +998,13 @@ function refreshCapture(h){
 }
 
 // Pre-built Werner strokes per hole for stats calculations
-const WERNER_STROKES=Object.fromEntries(HOLES.map(h=>[h.num,h.werner]));
+// Pre-built Werner strokes per hole for stats — computed per day inside calcStats
 
 // ── STATS ──────────────────────────────────────────────────────────────────────
 function calcStats(days){
   const res={firMade:0,firTotal:0,girMade:0,girTotal:0,puttsTotal:0,puttsHoles:0,threeputts:0,udMade:0,udTotal:0,penaltyTotal:0,scoreByPar:{3:[],4:[],5:[]},birdies:0,pars:0,bogeys:0,doubles:0,triples:0,holesPlayed:0,matchWon:0,matchDraw:0,matchLost:0,matchPlayed:0,totalGross:0,totalNetPar:0};
   days.forEach(day=>{
+    const wStrokes=getPlayerStrokes(day).werner;
     const matchArr=loadMatch(day);
     matchArr.forEach(r=>{
       if(!r)return;
@@ -894,7 +1024,7 @@ function calcStats(days){
       res.penaltyTotal+=s.penalty||0;
       const gross=s.score,diff=gross-h.par;
       res.totalGross+=gross;
-      res.totalNetPar+=(h.par+WERNER_STROKES[h.num]);
+      res.totalNetPar+=(h.par+wStrokes[h.num]);
       res.scoreByPar[h.par].push(gross);
       if(diff<=-1)res.birdies++;
       else if(diff===0)res.pars++;
@@ -1598,23 +1728,33 @@ function renderHole(){
   document.getElementById('holeBar').style.display='flex';
   document.getElementById('swipeHint').style.display='block';
   const h=HOLES[currentHole];
-  const zone=ZD.zm[h.num];
-  const wNP=h.par+h.werner,dNP=h.par+h.deon;
+  const dayZD=buildZD(currentDay);
+  const dayR=getRanksForDay(currentDay);
+  const ps=getPlayerStrokes(currentDay);
+  const zone=dayZD.zm[h.num];
+  const wStr=ps.werner[h.num];
+  const pStr=(currentDay===2?ps.carlo:ps.deon)[h.num];
+  const o1Str=ps.opp1[h.num];
+  const o2Str=ps.opp2[h.num];
+  const wNP=h.par+wStr;
+  const pNP=h.par+pStr;
+  const partnerName=DAY_PARTNER[currentDay]||'Partner';
+  const opp=DAY_OPP[currentDay];
   const isGIRTarget=GIR_TARGET.has(h.num);
   const strat=getStaticStrategy(h,currentDay);
   const aisData=loadAIS(currentDay,h.num);
 
   // Target Score calculation
-  function getTS(rank, par, strokes){
-    if(rank>=16) return par+strokes-2; // easiest holes — target net eagle = 4 pts
-    if(rank>=7)  return par+strokes-1; // mid — target net birdie = 3 pts
-    return par+strokes;                // hardest holes — target net par = 2 pts
+  function getTS(rank,par,strokes){
+    if(rank>=16) return par+strokes-2;
+    if(rank>=7)  return par+strokes-1;
+    return par+strokes;
   }
-  const wTS=getTS(R.w[h.num],h.par,h.werner);
-  const dTS=getTS(R.d[h.num],h.par,h.deon);
+  const wTS=getTS(dayR.w[h.num],h.par,wStr);
+  const pTS=getTS(dayR.p[h.num],h.par,pStr);
 
   document.getElementById('holeNum').textContent=h.num;
-  document.getElementById('holeBar').className=`hole-bar ${zone}`;
+  document.getElementById('holeBar').className=`hole-bar ${dayZD.zm[h.num]}`;
   document.getElementById('holeChips').innerHTML=
     `<div class="h-chip"><div class="v">P${h.par}</div></div>`+
     `<div class="h-chip"><div class="v">${h.dist}M</div></div>`+
@@ -1629,14 +1769,20 @@ function renderHole(){
         <thead><tr><th>Player</th><th style="text-align:center">Rank</th><th style="text-align:center">Str</th><th style="text-align:center">NP</th><th style="text-align:center">TS</th></tr></thead>
         <tbody>
           ${(()=>{
-            const euEdge=R.w[h.num]<=R.d[h.num]?'werner':'deon';
-            const usEdge=R.c[h.num]<=R.x[h.num]?'cilliers':'christo';
+            const euEdge=dayR.w[h.num]>=dayR.p[h.num]?'werner':'partner';
+            const usEdge=dayR.o1[h.num]>=dayR.o2[h.num]?'opp1':'opp2';
+            const pName=currentDay===2?'Carlo':'Deon';
+            const o1Name=currentDay===2?'Stephan':'Cilliers';
+            const o2Name=currentDay===2?'Ronald':'Christo';
+            const o1HCI=currentDay===2?4:16;
+            const o2HCI=currentDay===2?26:22;
+            const pHCI=currentDay===2?20:8;
             const players=[
-              {key:'werner', name:'Werner',hci:21,rank:R.w[h.num],strokes:h.werner,np:wNP,ts:wTS,team:'eu'},
-              {key:'deon',   name:'Deon',  hci:8, rank:R.d[h.num],strokes:h.deon,  np:dNP,ts:dTS,team:'eu'},
-              {key:'cilliers',name:'Cilliers',hci:16,rank:R.c[h.num],strokes:h.cilliers,np:h.par+h.cilliers,ts:null,team:'us'},
-              {key:'christo', name:'Christo', hci:22,rank:R.x[h.num],strokes:h.christo, np:h.par+h.christo, ts:null,team:'us'},
-            ].sort((a,b)=>a.rank-b.rank);
+              {key:'werner', name:'Werner', rank:dayR.w[h.num],  strokes:wStr,  np:wNP,  ts:wTS,  team:'eu'},
+              {key:'partner',name:pName,    rank:dayR.p[h.num],  strokes:pStr,  np:pNP,  ts:pTS,  team:'eu'},
+              {key:'opp1',   name:o1Name,   rank:dayR.o1[h.num], strokes:o1Str, np:h.par+o1Str, ts:null, team:'us'},
+              {key:'opp2',   name:o2Name,   rank:dayR.o2[h.num], strokes:o2Str, np:h.par+o2Str, ts:null, team:'us'},
+            ].sort((a,b)=>b.rank-a.rank);
             return players.map(p=>{
               const isWerner=p.key==='werner';
               const hasEdge=(p.key===euEdge&&p.team==='eu')||(p.key===usEdge&&p.team==='us');
@@ -1669,12 +1815,12 @@ function renderHole(){
       </div>
     </div>
     ${(()=>{
-      // EU gauge: rank 7(hardest/left/red) to 31(easiest/right/green)
-      const euRank=ZD.em[h.num];
-      const euPct=Math.round((euRank-7)/(31-7)*100);
-      // US gauge: same scale — US combined rank range also 7–31
-      const usRank=ZD.um[h.num];
-      const usPct=Math.round((usRank-7)/(31-7)*100);
+      const euRank=dayZD.em[h.num];
+      const usRank=dayZD.um[h.num];
+      const rangeMin=currentDay===2?3:7;
+      const rangeMax=currentDay===2?35:31;
+      const euPct=Math.round((euRank-rangeMin)/(rangeMax-rangeMin)*100);
+      const usPct=Math.round((usRank-rangeMin)/(rangeMax-rangeMin)*100);
       return `<div class="intensity-wrap">
         <div class="intensity-row">
           <div class="intensity-lbl">EU</div>
@@ -1688,7 +1834,6 @@ function renderHole(){
     })()}
 
     ${h.par>3&&currentDay===1?`<div class="section-head">Tee Strategy</div><div class="strategy-box" id="stratTeeBox">${strat.tee||''}</div>`:`<div id="stratTeeBox" style="display:none"></div>`}
-
     <div class="section-head">Strategy</div>
     <div class="strategy-box" id="stratMainBox">${h.desc}<span class="divider"></span>${strat.approach}</div>
 
